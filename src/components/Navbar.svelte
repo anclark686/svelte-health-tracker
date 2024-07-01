@@ -1,20 +1,75 @@
 <script>
-  const logo = "src/assets/rhc_logo_no_background.svg"
-  const home = "src/assets/home.svg"
-  const food = "src/assets/food.svg"
-  const water = "src/assets/water.svg"
-  const exercise = "src/assets/exercise.svg"
-  const weight = "src/assets/weight.svg"
-  const meds = "src/assets/meds.svg"
-  const mode = "src/assets/day-and-night.png"
+  import { onAuthStateChanged } from "firebase/auth";
+
+  import { auth } from '../firebase.js';
+  import { onMount } from "svelte";
+  import { goto } from "$app/navigation";
+
+  const PARENT_ROUTES = [
+    "login_register",
+    "food",
+  ]
+
+  let loading = true
+  let userLoggedIn = false  
+  // let isNestedRoute = false
+  const logo = "/src/assets/rhc_logo_no_background.svg"
+  const  home = "/src/assets/home.svg"
+  const  food = "/src/assets/food.svg"
+  const  water = "/src/assets/water.svg"
+  const  exercise = "/src/assets/exercise.svg"
+  const  weight = "/src/assets/weight.svg"
+  const  meds = "/src/assets/meds.svg"
+  const  mode = '/src/assets/day-and-night.png'
+  const  logout = "/src/assets/logout.svg"
+  const  login = "/src/assets/log_in.svg"
+  const  register = "/src/assets/person.svg"
+
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      const uid = user.uid;
+      userLoggedIn = true
+    } else {
+      userLoggedIn = false
+    }
+  });
+
+  onMount(() => {
+    console.log(window.location)
+    console.log(window.location.pathname)
+    console.log(window.location.pathname.split("/"))
+    // isNestedRoute = PARENT_ROUTES.includes(window.location.pathname.split("/")[1])
+
+    // console.log(isNestedRoute)
+
+    loading = false
+    
+  })
+
+  const logoutUser = () => {
+    auth.signOut()
+    goto("/")
+  }
+
+  const lightDarkMode = () => {
+    const body = document.getElementById("app")
+    console.log(body)
+    body.classList.toggle("app-light")
+    body.classList.toggle("app-dark")  
+  }
+
 </script>
 
 <nav class="navbar">
+  {#if !loading}
   <ul class="navbar-nav">
     <li class="logo">
-      <img src={logo} alt="logo" class="logo-icon">
+      <a href="/">
+        <img src={logo} alt="logo" class="logo-icon">
+      </a>
     </li>
 
+    {#if userLoggedIn}
     <span class="middle-group">
       <li class="nav-item">
         <a href="/dashboard" class="nav-link">
@@ -57,17 +112,42 @@
           <span class="link-text">Med Tracker</span>
         </a>
       </li>
+
+      <li class="nav-item">
+        <button class="nav-button" on:click={logoutUser}>
+          <img src={logout} alt="logout" class="nav-icon">
+          <span class="link-text">Logout</span>
+        </button>
+      </li>
     </span>
+    {:else}
+      <span class="middle-group">
+        <li class="nav-item">
+          <a href="/login_register/login" class="nav-link">
+            <img src={login} alt="login" class="nav-icon">
+            <span class="link-text">Login</span>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a href="/login_register/register" class="nav-link">
+            <img src={register} alt="register" class="nav-icon">
+            <span class="link-text">Register</span>
+          </a>
+        </li>
+      </span>  
+    {/if}
 
     <span class="last-item">
       <li class="nav-item">
-        <button class="nav-button">
+        <button class="nav-button" on:click={lightDarkMode}>
           <img src={mode} alt="dark - light" class="nav-icon">
           <span class="link-text">Light / Dark</span>
         </button>
       </li>
     </span>
   </ul>
+  {/if}
 </nav>
 
 <style>  
@@ -119,6 +199,7 @@
   .link-text {
     display: none;
     margin-left: 1rem;
+    color: var(--nav-link);
   }
 
   .logo {
