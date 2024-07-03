@@ -1,156 +1,161 @@
 <script>
-  import { onAuthStateChanged } from "firebase/auth";
+import {
+  onAuthStateChanged
+} from "firebase/auth";
+import {
+  goto
+} from "$app/navigation";
 
-  import { auth } from '../firebase.js';
-  import { onMount } from "svelte";
-  import { goto } from "$app/navigation";
+import {
+  auth
+} from '../firebase.js';
+import { logoutUser } from "../helpers/index.js";
 
-  const PARENT_ROUTES = [
-    "login_register",
-    "food",
-  ]
 
-  let loading = true
-  let userLoggedIn = false  
-  // let isNestedRoute = false
-  const logo = "/src/assets/rhc_logo_no_background.svg"
-  const  home = "/src/assets/home.svg"
-  const  food = "/src/assets/food.svg"
-  const  water = "/src/assets/water.svg"
-  const  exercise = "/src/assets/exercise.svg"
-  const  weight = "/src/assets/weight.svg"
-  const  meds = "/src/assets/meds.svg"
-  const  mode = '/src/assets/day-and-night.png'
-  const  logout = "/src/assets/logout.svg"
-  const  login = "/src/assets/log_in.svg"
-  const  register = "/src/assets/person.svg"
+const PARENT_ROUTES = [
+  "login_register",
+  "food",
+]
 
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      const uid = user.uid;
-      userLoggedIn = true
-    } else {
-      userLoggedIn = false
-    }
-  });
 
-  onMount(() => {
-    console.log(window.location)
-    console.log(window.location.pathname)
-    console.log(window.location.pathname.split("/"))
-    // isNestedRoute = PARENT_ROUTES.includes(window.location.pathname.split("/")[1])
+let loading = true
+let userLoggedIn = false
 
-    // console.log(isNestedRoute)
+const logo = "/src/assets/rhc_logo_no_background.svg"
+const home = "/src/assets/home.svg"
+const food = "/src/assets/food.svg"
+const water = "/src/assets/water.svg"
+const exercise = "/src/assets/exercise.svg"
+const weight = "/src/assets/weight.svg"
+const meds = "/src/assets/meds.svg"
+const mode = '/src/assets/day-and-night.png'
+const logout = "/src/assets/logout.svg"
+const login = "/src/assets/log_in.svg"
+const register = "/src/assets/person.svg"
 
+let cookies
+
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    const uid = user.uid;
+    userLoggedIn = true
     loading = false
-    
+  } else {
+    userLoggedIn = false
+    loading = false
+  }
+});
+
+const lightDarkMode = () => {
+  const body = document.getElementById("app")
+  body.classList.toggle("app-light")
+  body.classList.toggle("app-dark")
+
+  cookies = document.cookie.split(';')
+  cookies = cookies.filter((cookie) => {
+    !cookie.includes("darkmode")
   })
-
-  const logoutUser = () => {
-    auth.signOut()
-    goto("/")
+  if (body.classList.contains("app-light")) {
+    cookies.push("darkmode=light")
+  } else {
+    cookies.push("darkmode=dark")
   }
 
-  const lightDarkMode = () => {
-    const body = document.getElementById("app")
-    console.log(body)
-    body.classList.toggle("app-light")
-    body.classList.toggle("app-dark")  
-  }
-
+  document.cookie = cookies.join('; ')
+}
 </script>
 
 <nav class="navbar">
-  {#if !loading}
-  <ul class="navbar-nav">
-    <li class="logo">
-      <a href="/">
-        <img src={logo} alt="logo" class="logo-icon">
-      </a>
-    </li>
-
-    {#if userLoggedIn}
-    <span class="middle-group">
-      <li class="nav-item">
-        <a href="/dashboard" class="nav-link">
-          <img src={home} alt="home" class="nav-icon">
-          <span class="link-text">Dashboard</span>
-        </a>
-      </li>
-
-      <li class="nav-item">
-        <a href="/food" class="nav-link">
-          <img src={food} alt="food" class="nav-icon">
-          <span class="link-text">Food Tracker</span>
-        </a>
-      </li>
-  
-      <li class="nav-item">
-        <a href="/water" class="nav-link">
-          <img src={water} alt="water" class="nav-icon">
-          <span class="link-text">Water Tracker</span>
-        </a>
-      </li>
-  
-      <li class="nav-item">
-        <a href="/exercise" class="nav-link">
-          <img src={exercise} alt="exercise" class="nav-icon">
-          <span class="link-text">Exercise Tracker</span>
-        </a>
-      </li>
-  
-      <li class="nav-item">
-        <a href="/weight" class="nav-link">
-          <img src={weight} alt="weight" class="nav-icon">
-          <span class="link-text">Weight Tracker</span>
-        </a>
-      </li>
-  
-      <li class="nav-item">
-        <a href="/meds" class="nav-link">
-          <img src={meds} alt="meds" class="nav-icon">
-          <span class="link-text">Med Tracker</span>
-        </a>
-      </li>
-
-      <li class="nav-item">
-        <button class="nav-button" on:click={logoutUser}>
-          <img src={logout} alt="logout" class="nav-icon">
-          <span class="link-text">Logout</span>
-        </button>
-      </li>
-    </span>
-    {:else}
-      <span class="middle-group">
-        <li class="nav-item">
-          <a href="/login_register/login" class="nav-link">
-            <img src={login} alt="login" class="nav-icon">
-            <span class="link-text">Login</span>
-          </a>
+    {#if !loading}
+    <ul class="navbar-nav">
+        <li class="logo">
+            <a href="/">
+                <img src={logo} alt="logo" class="logo-icon">
+            </a>
         </li>
 
-        <li class="nav-item">
-          <a href="/login_register/register" class="nav-link">
-            <img src={register} alt="register" class="nav-icon">
-            <span class="link-text">Register</span>
-          </a>
-        </li>
-      </span>  
+        {#if userLoggedIn}
+        <span class="middle-group">
+            <li class="nav-item">
+                <a href="/dashboard" class="nav-link">
+                    <img src={home} alt="home" class="nav-icon">
+                    <span class="link-text">Dashboard</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a href="/food" class="nav-link">
+                    <img src={food} alt="food" class="nav-icon">
+                    <span class="link-text">Food Tracker</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a href="/water" class="nav-link">
+                    <img src={water} alt="water" class="nav-icon">
+                    <span class="link-text">Water Tracker</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a href="/exercise" class="nav-link">
+                    <img src={exercise} alt="exercise" class="nav-icon">
+                    <span class="link-text">Exercise Tracker</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a href="/weight" class="nav-link">
+                    <img src={weight} alt="weight" class="nav-icon">
+                    <span class="link-text">Weight Tracker</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a href="/meds" class="nav-link">
+                    <img src={meds} alt="meds" class="nav-icon">
+                    <span class="link-text">Med Tracker</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <button class="nav-button" on:click={logoutUser}>
+                    <img src={logout} alt="logout" class="nav-icon">
+                    <span class="link-text">Logout</span>
+                </button>
+            </li>
+        </span>
+        {:else}
+        <span class="middle-group">
+            <li class="nav-item">
+                <a href="/login_register/login" class="nav-link">
+                    <img src={login} alt="login" class="nav-icon">
+                    <span class="link-text">Login</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a href="/login_register/register" class="nav-link">
+                    <img src={register} alt="register" class="nav-icon">
+                    <span class="link-text">Register</span>
+                </a>
+            </li>
+        </span>
+        {/if}
+
+        <span class="last-item">
+            <li class="nav-item">
+                <button class="nav-button" on:click={lightDarkMode}>
+                    <img src={mode} alt="dark - light" class="nav-icon">
+                    <span class="link-text">Light / Dark</span>
+                </button>
+            </li>
+        </span>
+    </ul>
     {/if}
-
-    <span class="last-item">
-      <li class="nav-item">
-        <button class="nav-button" on:click={lightDarkMode}>
-          <img src={mode} alt="dark - light" class="nav-icon">
-          <span class="link-text">Light / Dark</span>
-        </button>
-      </li>
-    </span>
-  </ul>
-  {/if}
 </nav>
 
-<style>  
+<style>
   .navbar {
     width: 5rem;
     height: 100vh;
@@ -177,6 +182,17 @@
     flex-direction: column;
     justify-content: space-between;
     height: 100%;
+  }
+
+  .middle-group {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .middle-group::-webkit-scrollbar {
+    display: none;
   }
 
   .nav-item:last-child {
@@ -252,7 +268,7 @@
       display: none;
     }
 
-    .nav-link { 
+    .nav-link {
       height: 3rem;
     }
 
@@ -277,7 +293,12 @@
   }
 
   @keyframes fadeIn {
-    0% { opacity: 0; }
-    100% { opacity: 1; }
+    0% {
+      opacity: 0;
+    }
+
+    100% {
+      opacity: 1;
+    }
   }
 </style>

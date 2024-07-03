@@ -1,0 +1,69 @@
+<script>
+const todo = "***TODO***"
+
+const DIET = ["Balanced","Low Carb", "Low Fat", "High Protein"];
+</script>
+
+<div class="calorie-info-container content-box">
+    <h2 class="content-header">Macros</h2>
+    <div class="calorie-info">
+        <div class="info-breakdown">
+            <label for="diet" class="form-label">Diet Preference</label>
+            <select name="diet" id="diet" class="form-input">
+                <option value="">Select One</option>
+                {#each DIET as activity}
+                <option value={activity}>{activity}</option>
+                {/each}
+            </select>
+            <div class="info-line">
+                <p class="left">Protein:</p>
+                <p class="right">{todo}</p>
+            </div>
+
+            <div class="info-line">
+                <p class="left">Carbs:</p>
+                <p class="right">{todo}</p>
+            </div>
+
+            <div class="info-line">
+                <p class="left">Fat:</p>
+                <p class="right">{todo}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+  
+    
+<style>
+.calorie-info {
+  margin: 1rem;
+}
+
+.info-breakdown p {
+  margin: .5rem;
+  font-size: 1.2rem;
+  color: var(--text-color);
+}
+
+.info-line {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 5rem;
+}
+
+.left {
+  font-weight: bold;
+  text-align: left;
+}
+
+.right {
+  text-align: right;
+}
+
+@media (max-width: 600px) {
+  .info-line {
+    margin: 0 1rem;
+  }
+}
+</style>

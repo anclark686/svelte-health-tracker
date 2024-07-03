@@ -32,17 +32,27 @@
   <img src={logo} alt="logo" class="home-logo">
 </div>
 
-<div class="login-register">
+
   {#if !userLoggedIn}
+  <div class="login-register">
   <a href="/login_register/login">
     <button class="login-register-btn">Login</button>
   </a>
     <a href="/login_register/register">
       <button class="login-register-btn">Register</button>
     </a>
-    
+  </div>
+  {:else}
+  <div class="go-to-dashboard">
+    <h2>Head over to your dashboard to get started!</h2>
+    <div class="btn-container">
+      <a href="/dashboard">
+        <button class="login-register-btn">Dashboard</button>
+      </a>
+    </div>
+  </div>
   {/if}
-</div>
+
 
 <div class="descriptions">
   <div class="description-section">
@@ -103,13 +113,17 @@
     width: 30rem;
   }
 
-  .login-register {
+  .login-register, .go-to-dashboard {
     width: 50%;
     margin:  2rem auto;
     background-color: var(--section-background);
     padding: 2rem;
     border-radius: 10px;
     box-shadow: 0 0 10px var(--box-shadow);
+    text-align: center;
+  }
+
+  .login-register {
     display: flex;
     justify-content: center;
   }
@@ -124,6 +138,7 @@
     box-shadow: 0 0 10px var(--box-shadow);
     width: 150px;
     background-color: var(--btn-color);
+    color: var(--text-color);
   }
 
   .descriptions {

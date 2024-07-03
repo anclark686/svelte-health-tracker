@@ -3,6 +3,7 @@
   import { goto } from '$app/navigation';
 
   import { auth } from "../../../firebase";
+  import PageHeader from "../../../components/PageHeader.svelte";
 
   const ERROR_MAP = {
     "auth/email-already-in-use": "Email already in use",
@@ -38,6 +39,7 @@
 </script>
 
 <div class="login-page">
+  <PageHeader title="Login" dashboard={false} other={{}} />
   <img src={loginImg} alt="login" class="page-image">
 
   <form action="submit" class="login-form" on:submit|preventDefault={login}>
@@ -98,7 +100,7 @@
   }
 
   .error-message {
-    color: rgb(183, 14, 14);
+    color: var(--error-color);
   }
 
   @media (max-width: 600px) {
