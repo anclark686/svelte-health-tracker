@@ -9,7 +9,7 @@ import {
 import {
   auth
 } from '../firebase.js';
-import { logoutUser } from "../helpers/index.js";
+import { logoutUser } from "../lib/firebase_functions.js";
 
 
 const PARENT_ROUTES = [
@@ -86,7 +86,7 @@ const lightDarkMode = () => {
             <li class="nav-item">
                 <a href="/food" class="nav-link">
                     <img src={food} alt="food" class="nav-icon">
-                    <span class="link-text">Food Tracker</span>
+                    <span class="link-text">Meal Tracker</span>
                 </a>
             </li>
 

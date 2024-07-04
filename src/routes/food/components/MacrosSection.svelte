@@ -8,6 +8,7 @@ const DIET = ["Balanced","Low Carb", "Low Fat", "High Protein"];
     <h2 class="content-header">Macros</h2>
     <div class="calorie-info">
         <div class="info-breakdown">
+          <div class="select-container">
             <label for="diet" class="form-label">Diet Preference</label>
             <select name="diet" id="diet" class="form-input">
                 <option value="">Select One</option>
@@ -15,6 +16,8 @@ const DIET = ["Balanced","Low Carb", "Low Fat", "High Protein"];
                 <option value={activity}>{activity}</option>
                 {/each}
             </select>
+          </div>
+            
             <div class="info-line">
                 <p class="left">Protein:</p>
                 <p class="right">{todo}</p>
@@ -38,6 +41,11 @@ const DIET = ["Balanced","Low Carb", "Low Fat", "High Protein"];
 <style>
 .calorie-info {
   margin: 1rem;
+}
+
+.select-container {
+  display: flex;
+  flex-direction: column;
 }
 
 .info-breakdown p {

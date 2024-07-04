@@ -1,4 +1,5 @@
 <script>
+import moment from "moment-timezone"
 import {
   onAuthStateChanged
 } from "firebase/auth";
@@ -8,16 +9,19 @@ import {
 } from "../../firebase";
 import {
   getDataFromDB
-} from "../../helpers"
+} from "../../lib/firebase_functions"
 import PageHeader from "../../components/PageHeader.svelte";
 import LoadingSpinner from "../../components/LoadingSpinner.svelte";
-
-const mainImage = "../src/assets/exercise.svg"
+import DateSwitcher from "../../components/DateSwitcher.svelte";
+import CardioExercise from "./components/CardioExercise.svelte";
+import StrengthExercise from "./components/StrengthExercise.svelte";
+import ExerciseStats from "./components/ExerciseStats.svelte";
 
 let loading = true
 let userLoggedIn = false
 let uid = null
 let userData = {}
+let date = moment().tz(moment.tz.guess())
 
 onAuthStateChanged(auth, async (user) => {
   if (user) {
@@ -36,12 +40,15 @@ onAuthStateChanged(auth, async (user) => {
 
 <main>
     <PageHeader title="Exercise Tracker" dashboard={true} other={{}} />
+    <DateSwitcher bind:date />
+
     {#if loading}
     <LoadingSpinner />
     {:else}
     <div class="exercise-content">
-        <img src="{mainImage}" alt="exercise" class="page-image">
-
+        <CardioExercise />
+        <StrengthExercise />
+        <ExerciseStats />
     </div>
     {/if}
 </main>

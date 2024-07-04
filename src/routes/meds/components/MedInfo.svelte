@@ -1,60 +1,15 @@
 <script>
-import {
-  onAuthStateChanged
-} from "firebase/auth";
-import {
-  doc,
-  getDocs,
-  query,
-  collection
-} from "firebase/firestore";
-
-import {
-  auth,
-  db
-} from "../../../firebase";
-
-let loading = true
-let userLoggedIn = false
-let uid = null
-let medData = []
-
-export const getMedsFromDB = async () => {
-  const data = []
-  const q = query(collection(db, `users/${uid}/meds`), );
-  const medSnapshot = await getDocs(q);
-  medSnapshot.forEach((doc) => {
-    // doc.data() is never undefined for query doc snapshots
-    console.log(doc.id, " => ", doc.data());
-    data.push({
-      ...doc.data(),
-      id: doc.id
-    })
-  });
-  return data
-}
-
-onAuthStateChanged(auth, async (user) => {
-  if (user) {
-    uid = user.uid;
-    userLoggedIn = true
-    const response = await getMedsFromDB().then(data => {
-      medData = data
-      loading = false
-      console.log("Med Data: ", data)
-    })
-  } else {
-    userLoggedIn = false
-  }
-});
-const todo = "***TODO***"
+  import { capitalize } from "../../../lib/helper_functions"
+export let medData
 </script>
 
 <div class="med-info-container content-box">
     <h2 class="content-header">Medication Info</h2>
     <div class="med-info">
+        
+        {#if medData.length !== 0}
         <h3>Medication List</h3>
-        {#if !loading}
+        <p>{medData.length} Total Medications</p>
         <table class="med-table">
             <thead class="med-table-header">
                 <tr>
@@ -66,13 +21,15 @@ const todo = "***TODO***"
             <tbody>
                 {#each medData as med, i}
                 <tr class={i % 2 === 0 ? "even-row" : "odd-row"}>
-                    <td>{med.name}</td>
+                    <td>{capitalize(med.name)}</td>
                     <td>{med.dose}</td>
                     <td>{med.time}</td>
                 </tr>
                 {/each}
             </tbody>
         </table>
+        {:else}
+        <p class="no-meds">No medications found. Click 'Add New' to add a new medication.</p>
         {/if}
     </div>
 </div>
@@ -99,5 +56,10 @@ td {
   padding: 10px;
   text-align: center;
   border: 2px solid var(--text-color);
+}
+
+.no-meds {
+  padding: 1rem;
+  font-size: 1.5rem;
 }
 </style>

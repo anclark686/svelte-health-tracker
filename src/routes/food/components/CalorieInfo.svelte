@@ -8,13 +8,16 @@ const ACTIVITY_LEVELS = ["Sedentary", "Light Activity", "Moderate Activity", "Da
     <h2 class="content-header">Calorie Info</h2>
     <div class="calorie-info">
         <div class="info-breakdown">
-          <label for="activityLevel" class="form-label">Activity Level</label>
-        <select name="activityLevel" id="activityLevel" class="form-input">
-            <option value="">Select One</option>
-            {#each ACTIVITY_LEVELS as activity}
-            <option value={activity}>{activity}</option>
-            {/each}
-        </select>
+          <div class="select-container">
+            <label for="activityLevel" class="form-label">Activity Level</label>
+            <select name="activityLevel" id="activityLevel" class="form-input">
+                <option value="">Select One</option>
+                {#each ACTIVITY_LEVELS as activity}
+                <option value={activity}>{activity}</option>
+                {/each}
+            </select>
+          </div>
+          
             <div class="info-line">
                 <p class="left">Allowance:</p>
                 <p class="right">{todo}</p>
@@ -42,6 +45,11 @@ const ACTIVITY_LEVELS = ["Sedentary", "Light Activity", "Moderate Activity", "Da
   <style>
 .calorie-info {
   margin: 1rem;
+}
+
+.select-container {
+  display: flex;
+  flex-direction: column;
 }
 
 .info-breakdown p {

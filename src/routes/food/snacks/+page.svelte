@@ -1,5 +1,6 @@
 <script>
-  import {
+import moment from "moment-timezone"
+import {
   onAuthStateChanged
 } from "firebase/auth";
 
@@ -8,16 +9,22 @@ import {
 } from "../../../firebase";
 import {
   getDataFromDB
-} from "../../../helpers"
+} from "../../../lib/firebase_functions"
 import PageHeader from "../../../components/PageHeader.svelte";
 import LoadingSpinner from "../../../components/LoadingSpinner.svelte";
+import DateSwitcher from "../../../components/DateSwitcher.svelte";
+import AddFood from "../components/AddFood.svelte";
+import ItemsTable from "../components/ItemsTable.svelte";
+import MealStats from "../components/MealStats.svelte";
 
-const mainImage = "../../src/assets/exercise.svg"
+const mainImage = "/../../src/assets/snack.svg"
 
 let loading = true
 let userLoggedIn = false
 let uid = null
 let userData = {}
+let showModal = false;
+let date = moment().tz(moment.tz.guess())
 
 onAuthStateChanged(auth, async (user) => {
   if (user) {
@@ -32,22 +39,34 @@ onAuthStateChanged(auth, async (user) => {
     userLoggedIn = false
   }
 });
+
+const hideForm = (e) => {
+  showModal = false
+  // loading = true
+  // medInfo.getMedsFromDB().then(() => loading = false)
+}
 </script>
 
 <main>
-  <PageHeader title="Snack Diary" dashboard={true} other={{destination: "food", title: "Food Tracker"}} />
-  {#if loading}
-  <LoadingSpinner />
-  {:else}
-  <div class="snack-content">
-      <img src="{mainImage}" alt="exercise" class="page-image">
+    <PageHeader title="Snack Diary" dashboard={true} other={{destination: "food", title: "Meal Tracker"}} />
+    <DateSwitcher bind:date />
 
-  </div>
-  {/if}
-</main>
+    {#if loading}
+    <LoadingSpinner />
+    {:else}
+    <div class="snack-content">
+        <img src="{mainImage}" alt="exercise" class="page-image">
+
+        <ItemsTable foodType="snacks" data={{}}/>
+            <button class="btn" on:click={() => showModal = true}>Add Food</button>
+            <AddFood foodType="snacks" bind:showModal hideForm={hideForm} />
+            <MealStats foodType="snacks" data={{}} />
+            </div>
+            {/if}
+            </main>
 
 <style>
 .snack-content {
-text-align: center;
+  text-align: center;
 }
 </style>

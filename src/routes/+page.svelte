@@ -58,7 +58,7 @@
   <div class="description-section">
     <img src={food} alt="food" class="home-image">
     <p class="home-description">
-      Track your meals and macronutrients using the food tracker. The food tracker 
+      Track your meals and macronutrients using the Meal Tracker. The Meal Tracker 
       allows you to create and favorite meals for easy reuse. View which foods and 
       meals are within or outside of your macronutrient goals.
     </p>

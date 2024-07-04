@@ -1,30 +1,46 @@
 <script>
 const todo = "***TODO***"
+
+const image = "../../src/assets/cardio.svg"
 </script>
 
-<div class="water-stats-container content-box">
-    <h2 class="content-header">Water Stats</h2>
+<div class="meal-stats-container content-box">
+    <h2 class="content-header">Cardio Exercises</h2>
+
+    <img src="{image}" alt="cardio" class="sub-image">
+
     <div class="stats-info">
         <div class="info-breakdown">
             <div class="info-line">
-                <p class="left">Recommended:</p>
+                <p class="left">Total Items</p>
                 <p class="right">{todo}</p>
             </div>
 
             <div class="info-line">
-                <p class="left">Total Ounces:</p>
+                <p class="left">Total Calories:</p>
                 <p class="right">{todo}</p>
             </div>
 
             <div class="info-line">
-                <p class="left">Ounces Remaining:</p>
+                <p class="left">Total Carbs:</p>
+                <p class="right">{todo}</p>
+            </div>
+
+            <div class="info-line">
+                <p class="left">Total Fats:</p>
+                <p class="right">{todo}</p>
+            </div>
+
+            <div class="info-line">
+                <p class="left">Total Carbs:</p>
                 <p class="right">{todo}</p>
             </div>
         </div>
     </div>
 </div>
 
-<style>
+  
+  <style>
 .stats-info {
   margin: 1rem;
 }

@@ -2,29 +2,35 @@
 const todo = "***TODO***"
 </script>
 
-<div class="water-stats-container content-box">
-    <h2 class="content-header">Water Stats</h2>
+<div class="exercise-stats-container content-box">
+    <h2 class="content-header">Exercise Stats</h2>
     <div class="stats-info">
         <div class="info-breakdown">
             <div class="info-line">
-                <p class="left">Recommended:</p>
+                <p class="left">Unique Exercises:</p>
                 <p class="right">{todo}</p>
             </div>
 
             <div class="info-line">
-                <p class="left">Total Ounces:</p>
+                <p class="left">Time Spent:</p>
                 <p class="right">{todo}</p>
             </div>
 
             <div class="info-line">
-                <p class="left">Ounces Remaining:</p>
+                <p class="left">Calories Burned:</p>
+                <p class="right">{todo}</p>
+            </div>
+
+            <div class="info-line">
+                <p class="left">Favorite Exercise:</p>
                 <p class="right">{todo}</p>
             </div>
         </div>
     </div>
 </div>
 
-<style>
+  
+  <style>
 .stats-info {
   margin: 1rem;
 }

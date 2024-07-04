@@ -90,4 +90,18 @@
 			opacity: 1;
 		}
 	}
+
+
+	dialog::-webkit-scrollbar {
+  width: 1rem;
+}
+
+dialog::-webkit-scrollbar-track {
+  background: var(--darkest-of-blues);
+}
+
+dialog::-webkit-scrollbar-thumb {
+  background: var(--med-sky-blue)
+}
+
 </style>

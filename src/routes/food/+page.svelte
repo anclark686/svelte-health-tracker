@@ -8,7 +8,7 @@ import {
 } from "../../firebase";
 import {
   getDataFromDB
-} from "../../helpers"
+} from "../../lib/firebase_functions"
 import PageHeader from "../../components/PageHeader.svelte";
 import LoadingSpinner from "../../components/LoadingSpinner.svelte";
 import FoodDiaries from "./components/FoodDiaries.svelte";
@@ -38,7 +38,7 @@ onAuthStateChanged(auth, async (user) => {
 </script>
 
 <main>
-    <PageHeader title="Food Tracker" dashboard={true} other={{}} />
+    <PageHeader title="Meal Tracker" dashboard={true} other={{}} />
     {#if loading}
     <LoadingSpinner />
     {:else}

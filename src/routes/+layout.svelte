@@ -82,6 +82,7 @@ onMount(() => {
   --content-link: var(--dark-sky-blue);
   --table-header: var(--sky-blue);
   --table-every-other: var(--background-color);
+  --date-switcher-background: var(--sky-blue);
 }
 
 :global(.app-dark) {
@@ -99,6 +100,7 @@ onMount(() => {
   --content-link: var(--sky-blue);
   --table-header: var(--med-sky-blue);
   --table-every-other: var(--background-color);
+  --date-switcher-background: var(--med-sky-blue);
 }
 
 :global(html),
@@ -252,6 +254,10 @@ onMount(() => {
 :global(.error-message) {
   color: var(--error-color);
   margin-top: 0;
+}
+
+:global(.medium-image) {
+  width: 5rem;
 }
 
 @media (max-width: 600px) {

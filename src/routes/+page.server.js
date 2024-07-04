@@ -1,17 +1,15 @@
-
 export function load({ cookies }) {
-
-//   let loading = true
-// let darkmode = false
-// // let cookies
-// const sessionCookie = cookies.get('darkmode');
-// console.log(sessionCookie)
+  //   let loading = true
+  // let darkmode = false
+  // // let cookies
+  // const sessionCookie = cookies.get('darkmode');
+  // console.log(sessionCookie)
 
   // const getDarkMode = () => {
   //   if (2+2 === 4) {
   //     console.log("you here?")
   //     console.log(cookies.get("darkmode"))
-    
+
   //   // if (document.cookie.includes("darkmode")) {
   //   //   cookies = document.cookie.split(';')
   //   //   cookies.forEach((cookie) => {
@@ -31,6 +29,6 @@ export function load({ cookies }) {
 
   // getDarkMode()
   return {
-    something: "hello"
-  }
+    something: "hello",
+  };
 }

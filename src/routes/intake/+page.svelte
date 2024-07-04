@@ -10,15 +10,16 @@ import {
 
 import {
   convertHeightToCm,
-  convertWeightToKg
-} from "../../helper_functions";
+  convertWeightToKg,
+  getBasicData
+} from "../../lib/helper_functions";
 import {
   auth,
   db
 } from "../../firebase";
 import {
   logoutUser
-} from "../../helpers/index";
+} from "../../lib/firebase_functions";
 import PageHeader from "../../components/PageHeader.svelte";
 import Modal from "../../components/Modal.svelte";
 import BasicInfo from "./components/BasicInfo.svelte";
@@ -32,19 +33,6 @@ const buttonConfig = {
   secondaryText: "Logout",
   onPrimaryClick: "close",
   onSecondaryClick: () => logoutUser(),
-}
-
-const getBasicData = (e) => {
-  const formData = new FormData(e.target);
-  const data = {};
-
-  for (let [key, value] of formData.entries()) {
-    console.log(key, value);
-    data[key] = value.toString();
-    errorMap[key] = false;
-  }
-
-  return data
 }
 
 const validateData = (data) => {
