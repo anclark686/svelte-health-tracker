@@ -4,9 +4,8 @@ import {
   collection
 } from "firebase/firestore";
 
-import {
-  getBasicData
-} from "../../../lib/helper_functions";
+import { getBasicData } from "../../../lib/helper_functions";
+import { addNewFoodToFoods, addNewFoodToDatesManual } from "../../../lib/firebase_functions"
 import {
   auth,
   db
@@ -16,8 +15,9 @@ import Modal from "../../../components/Modal.svelte";
 export let showModal
 export let hideForm
 export let foodType
+export let date
 
-const QUANTITIES = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+const QUANTITIES = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
 let searchPage = false
 let searchTerm = ""
@@ -31,28 +31,22 @@ const buttonConfig = {
   onPrimaryClick: "submit",
   onSecondaryClick: "close",
 }
-
-const addNewMed = async (e) => {
-  console.log(e)
-  console.log("adding new med")
+const addFood = async (e) => {
   const uid = auth.currentUser.uid
-  console.log(uid)
-
-  // const { name, dose, time } = getBasicData(e)
-
-  // const docRef = await addDoc(collection(db, `users/${uid}/meds`), {
-  //   name,
-  //   dose,
-  //   time,
-  //   uid: uid
-  // });
-  // console.log(name, dose, time)
-  // hideForm()
+  const data = getBasicData(e)
+  const response = await addNewFoodToFoods(data, uid, foodType)
+    .then(async () => {
+      const response2 = await addNewFoodToDatesManual(data, uid, foodType, date.format("MM-DD-YYYY"))
+        .then(() => {
+          console.log("done")
+          hideForm()
+        })
+    })
 }
 </script>
 
 <div class="add-food-container">
-    <form action="submit" class="add-food-form" on:submit|preventDefault={addNewMed}>
+    <form action="submit" class="add-food-form" on:submit|preventDefault={addFood}>
         <Modal bind:showModal buttonConfig={buttonConfig}>
             <div class="header" slot="header">
                 <img src={foodImg} alt="food" class="medium-image">
@@ -90,8 +84,8 @@ const addNewMed = async (e) => {
 
                 <div class="sm-input-row">
                     <div class="sm-input-col">
-                        <label for="fats" class="form-label">Fats</label>
-                        <input type="number" id="fats" name="fats" class="form-input" />
+                        <label for="fat" class="form-label">Fat</label>
+                        <input type="number" id="fat" name="fat" class="form-input" />
                     </div>
 
                     <div class="sm-input-col">

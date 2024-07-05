@@ -1,16 +1,27 @@
 <script>
 export let date
+export let onChange
 
 const rightArrow = "../../../src/assets/right-arrow.svg"
 const leftArrow = "../../../src/assets/left-arrow.svg"
+
+const onDateChange = (direction) => {
+  if (direction === 'back') {
+    date = date.subtract(1, 'day')
+  } else {
+    date = date.add(1, 'day')
+  }
+
+  onChange()
+}
 </script>
 
 <div class="date-switcher">
-  <button on:click={() => date = date.subtract(1, 'day')} class="date-switcher-btn">
+  <button on:click={() => onDateChange('back')} class="date-switcher-btn">
     <img src={leftArrow} alt="left arrow" class="arrow-img"/>
   </button>
   <h1>{date.format("MMMM Do, YYYY")}</h1>
-  <button on:click={() => date = date.add(1, 'day')} class="date-switcher-btn">
+  <button on:click={() => onDateChange('forward')} class="date-switcher-btn">
     <img src={rightArrow} alt="right arrow" class="arrow-img"/>
   </button>
 </div>

@@ -30,7 +30,6 @@ const mainImage = "../src/assets/pills.svg"
 let loading = true
 let userLoggedIn = false
 let uid = null
-let userData = {}
 let medData = []
 let showModal = false;
 
