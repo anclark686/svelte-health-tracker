@@ -5,7 +5,7 @@ const ACTIVITY_LEVELS = ["Sedentary", "Light Activity", "Moderate Activity", "Da
 </script>
 
 <div class="calorie-info-container content-box">
-    <h2 class="content-header">Calorie Info</h2>
+    <h2 class="content-header">Daily Calorie Info</h2>
     <div class="calorie-info">
         <div class="info-breakdown">
           <div class="select-container">

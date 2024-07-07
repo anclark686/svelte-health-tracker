@@ -33,6 +33,8 @@ const QUANTITIES = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
 let searchPage = false
 let searchTerm = ""
+let resultList = []
+let searchPressed = false
 let existingFoods = {}
 let showBreakfast = false
 let showLunch = false
@@ -40,7 +42,7 @@ let showDinner = false
 let showSnacks = false
 let selectedFood = null
 
-const title = foodType.charAt(0).toUpperCase() + foodType.slice(1)
+const title = capitalize(foodType)
 const foodImg = "../../../../src/assets/food.svg"
 
 const buttonConfig = {
@@ -84,14 +86,14 @@ const findFoodinFoods = (foodName) => {
 const addFoodToBoth = async (e) => {
   const uid = auth.currentUser.uid
   const data = getBasicData(e)
-    const response = await addOrEditFoodInFoods(data, uid, foodType)
-      .then(async () => {
-        const response2 = await addOrEditFoodInDates(data, uid, foodType, date.format("MM-DD-YYYY"))
-          .then(() => {
-            console.log("done")
-            hideForm(data)
-          })
-      })
+  const response = await addOrEditFoodInFoods(data, uid, foodType)
+    .then(async () => {
+      const response2 = await addOrEditFoodInDates(data, uid, foodType, date.format("MM-DD-YYYY"))
+        .then(() => {
+          console.log("done")
+          hideForm(data)
+        })
+    })
 }
 
 const addExistingFoodToDates = async (food) => {
@@ -99,7 +101,7 @@ const addExistingFoodToDates = async (food) => {
   const foundFood = findFoodinFoods(food.name)
   if (foundFood) {
     food.quantity = (parseInt(foundFood.quantity) + 1).toString()
-  } else{
+  } else {
     food.quantity = "1"
   }
   console.log(food.quantity)
@@ -130,10 +132,29 @@ const switchToManual = (e) => {
   }
 }
 
+const searchInAllFoods = () => {
+  searchPressed = true
+  if (searchTerm) {
+    const allFoods = [...existingFoods.breakfast, ...existingFoods.lunch, ...existingFoods.dinner, ...existingFoods.snacks]
+    const foodStrArr = allFoods.map((food) => `${food.name} ${food.meal}`)
+    console.log(allFoods)
+    console.log(foodStrArr)
+    const tempResultList = []
+
+    for (let i = 0; i < foodStrArr.length; i++) {
+      if (foodStrArr[i].toLowerCase().includes(searchTerm.toLowerCase())) {
+        tempResultList.push(allFoods[i])
+      }
+    }
+    resultList = tempResultList
+    console.log(tempResultList)
+  }
+
+}
+
 onMount(async () => {
   getAllFoods()
 })
-
 </script>
 
 <div class="add-food-container">
@@ -190,9 +211,9 @@ onMount(async () => {
             {:else}
             <div class="search-container">
                 <input type="text" id="search" name="search" class="form-input" bind:value={searchTerm} />
-                <button class="small-btn">Search</button>
+                <button class="small-btn" on:click|preventDefault={searchInAllFoods}>Search</button>
             </div>
-
+            {#if !searchPressed}
             <div class="existing-foods">
                 <div class="breakfast mini-content">
                     <button class="show-food-btn" on:click={() => showBreakfast = !showBreakfast}>
@@ -258,6 +279,21 @@ onMount(async () => {
                     </div>
                 </div>
             </div>
+            {:else}
+            <div class="search-results-container">
+                <h3>Search Results</h3>
+
+                {#if resultList.length > 0}
+                {#each resultList as food}
+                <button class={selectedFood?.name == food.name ? "add-existing-btn selected-btn" : "add-existing-btn"} on:click|preventDefault={() => selectedFood = food}>
+                    <p>{capitalize(food.name)}</p>
+                </button>
+                {/each}
+                {:else}
+                <h4>No results found. Try adjusting your search.</h4>
+                {/if}
+            </div>
+            {/if}
             {/if}
         </Modal>
     </form>
@@ -340,5 +376,9 @@ h2 {
   color: var(--text-color);
   border: none;
   outline: none;
+}
+
+.search-results-container {
+  color: var(--text-color);
 }
 </style>

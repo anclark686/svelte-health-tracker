@@ -71,7 +71,7 @@ const hideAddForm = (food) => {
         <ItemsTable bind:foodData foodType={foodType} date={date} />
         <button class="btn" on:click={() => showAddModal = true}>Add Food</button>
         <AddFood bind:showAddModal foodType={foodType} hideForm={hideAddForm} date={date} foodData={foodData} />
-        <MealStats foodType={foodType} data={{}} />
+        <MealStats foodType={foodType} data={foodData} />
     </div>
     {/if}
 </main>

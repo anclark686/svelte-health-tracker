@@ -5,7 +5,7 @@ const DIET = ["Balanced","Low Carb", "Low Fat", "High Protein"];
 </script>
 
 <div class="calorie-info-container content-box">
-    <h2 class="content-header">Macros</h2>
+    <h2 class="content-header">Macro Preferences</h2>
     <div class="calorie-info">
         <div class="info-breakdown">
           <div class="select-container">

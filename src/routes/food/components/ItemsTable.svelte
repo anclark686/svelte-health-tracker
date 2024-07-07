@@ -117,7 +117,7 @@ const hideEditForm = (oldFood, newFood) => {
     <p class="no-items">No items found. Click 'Add Food' to add a new food.</p>
     {/if}
 
-    <EditFood bind:showEditModal bind:previousFood foodType={foodType} hideForm={hideEditForm} date={date} foodData={foodData} />
+    <EditFood bind:showEditModal bind:previousFood foodType={foodType} hideForm={hideEditForm} date={date} />
 </div>
 
 <style>

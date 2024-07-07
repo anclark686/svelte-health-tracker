@@ -1,13 +1,5 @@
 <script>
 import {
-  onMount
-} from "svelte";
-import {
-  addDoc,
-  collection
-} from "firebase/firestore";
-
-import {
   capitalize,
   getBasicData
 } from "$lib/helper_functions";
@@ -19,7 +11,6 @@ import {
 } from "$lib/firebase_functions"
 import {
   auth,
-  db
 } from "../../../firebase";
 import Modal from "../../../components/Modal.svelte";
 
@@ -28,11 +19,10 @@ export let previousFood
 export let hideForm
 export let foodType
 export let date
-export let foodData
 
 const QUANTITIES = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
-const title = foodType.charAt(0).toUpperCase() + foodType.slice(1)
+let title = "Food"
 const foodImg = "../../../../src/assets/food.svg"
 
 const buttonConfig = {
@@ -73,8 +63,9 @@ const editFood = async (e) => {
           })
       })
   }
-
 }
+
+$: if (previousFood) title = capitalize(previousFood?.name)
 </script>
 
 <div class="add-food-container">
