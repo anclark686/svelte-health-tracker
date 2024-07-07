@@ -16,10 +16,10 @@ import {
 } from "../../firebase";
 import {
   getDataFromDB
-} from "../../lib/firebase_functions"
+} from "$lib/firebase_functions"
 import {
   getBasicData
-} from "../../lib/helper_functions";
+} from "$lib/helper_functions";
 import PageHeader from "../../components/PageHeader.svelte";
 import LoadingSpinner from "../../components/LoadingSpinner.svelte";
 import MedInfo from "./components/MedInfo.svelte";

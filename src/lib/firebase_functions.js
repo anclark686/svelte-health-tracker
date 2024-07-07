@@ -1,5 +1,5 @@
 import { goto } from "$app/navigation";
-import { doc, getDoc, query, collection, getDocs, addDoc, setDoc } from "firebase/firestore";
+import { doc, getDoc, query, collection, getDocs, addDoc, setDoc, deleteDoc } from "firebase/firestore";
 
 import { auth, db } from "../firebase";
 import { getBasicData } from "../lib/helper_functions";
@@ -13,17 +13,28 @@ export const getDataFromDB = async (uid) => {
   const docRef = doc(db, "users", uid);
   const docSnap = await getDoc(docRef);
   if (docSnap.exists()) {
-    console.log("Document data:", docSnap.data());
     return docSnap.data();
   } else {
-    // doc.data() will be undefined in this case
     console.log("No such document!");
     return {};
   }
 };
 
-export const findFoodInFoods = async (uid, food) => {
+export const getAllFoodsInFoods = async (uid) => {
+  const foodObj = {
+    breakfast: [],
+    lunch: [],
+    dinner: [],
+    snacks: [],
+  }
+  const q = query(collection(db, "users", uid, "foods"));
+  const querySnapshot = await getDocs(q);
 
+  querySnapshot.forEach((doc) => {
+    foodObj[doc.data().meal].push(doc.data());
+  });
+
+  return foodObj
 }
 
 export const findMealsInDates = async (uid, meal, date) => {
@@ -32,15 +43,13 @@ export const findMealsInDates = async (uid, meal, date) => {
 
   const querySnapshot = await getDocs(q);
   querySnapshot.forEach((doc) => {
-    // doc.data() is never undefined for query doc snapshots
-    console.log(doc.id, " => ", doc.data());
     foodArray.push(doc.data());
   });
 
   return foodArray
 }
 
-export const addNewFoodToFoods = async (data, uid, meal) => {
+export const addOrEditFoodInFoods = async (data, uid, meal) => {
   const {
     name,
     calories,
@@ -62,10 +71,7 @@ export const addNewFoodToFoods = async (data, uid, meal) => {
   })
 }
 
-export const addNewFoodToDatesManual = async (data, uid, meal, date) => {
-  console.log("adding new food")
-  console.log(uid)
-
+export const addOrEditFoodInDates = async (data, uid, meal, date) => {
   const {
     name,
     calories,
@@ -74,7 +80,7 @@ export const addNewFoodToDatesManual = async (data, uid, meal, date) => {
     carbs,
     quantity,
   } = data
-  console.log(name, calories, protein, fat, carbs, quantity);
+
   return await setDoc(doc(db, "users", uid, "dates", date, meal, name.toLowerCase()), {
     name: name.toLowerCase(),
     calories,
@@ -84,5 +90,33 @@ export const addNewFoodToDatesManual = async (data, uid, meal, date) => {
     quantity,
     meal: meal,
     uid: uid
+  });
+}
+
+export const deleteFoodFromDates = async (uid, food, date) => {
+  console.log(food)
+  console.log(date)
+  console.log(uid)
+  const docRef = doc(db, "users", uid, "dates", date, food.meal, food.name.toLowerCase());
+
+  await deleteDoc(docRef);
+}
+
+export const deleteFoodFromFoods = async (uid, food) => {
+  const docRef = doc(db, "users", uid, "foods", food.name.toLowerCase());
+
+  await deleteDoc(docRef);
+}
+
+export const changeQuantityInDates = async (uid, food, date, quantity) => {
+  console.log(food)
+  console.log(date)
+  console.log(uid)
+  console.log(quantity)
+  const docRef = doc(db, "users", uid, "dates", date, food.meal, food.name.toLowerCase());
+
+  await setDoc(docRef, {
+    ...food,
+    quantity
   });
 }

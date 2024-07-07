@@ -9,7 +9,7 @@ import {
 } from "../../firebase";
 import {
   getDataFromDB
-} from "../../lib/firebase_functions"
+} from "$lib/firebase_functions"
 import PageHeader from "../../components/PageHeader.svelte";
 import LoadingSpinner from "../../components/LoadingSpinner.svelte";
 import DateSwitcher from "../../components/DateSwitcher.svelte";

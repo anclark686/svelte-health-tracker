@@ -9,7 +9,7 @@ import {
 } from "../../../firebase";
 import {
   findMealsInDates
-} from "../../../lib/firebase_functions"
+} from "$lib/firebase_functions"
 import PageHeader from "../../../components/PageHeader.svelte";
 import LoadingSpinner from "../../../components/LoadingSpinner.svelte";
 import DateSwitcher from "../../../components/DateSwitcher.svelte";
@@ -18,55 +18,50 @@ import ItemsTable from "../components/ItemsTable.svelte";
 import MealStats from "../components/MealStats.svelte";
 
 const mainImage = "/../../src/assets/snack.svg"
+const foodType = "snacks"
 
 let loading = true
 let userLoggedIn = false
 let uid = null
 let foodData = []
-let showModal = false;
+let showAddModal = false;
 let date = moment().tz(moment.tz.guess())
 
-onAuthStateChanged(auth, async (user) => {
-  console.log(date.format("MM-DD-YYYY"))
-  if (user) {
-    uid = user.uid;
-    userLoggedIn = true
-    const response = await findMealsInDates(uid, "snacks", date.format("MM-DD-YYYY"))
-      .then(data => {
-        loading = false
-        foodData = data 
-        console.log("Document Data: ", data)
-      })
-  } else {
-    userLoggedIn = false
-  }
-});
-
-const hideForm = async (e) => {
-  showModal = false
-  loading = true
-  const response = await findMealsInDates(uid, "snacks", date.format("MM-DD-YYYY"))
-    .then(data => {
-      loading = false
-      foodData = data 
-      console.log("Document Data: ", data)
-    })
+const addFoodToList = (food) => {
+  console.log(food)
+  foodData = [...foodData, food]
 }
 
-const onDateChange = async (e) => {
+const refreshMeals = async () => {
   loading = true
-  const response = await findMealsInDates(uid, "snacks", date.format("MM-DD-YYYY"))
+  const response = await findMealsInDates(uid, "breakfast", date.format("MM-DD-YYYY"))
     .then(data => {
       loading = false
       foodData = data
       console.log("Document Data: ", data)
     })
 }
+
+onAuthStateChanged(auth, async (user) => {
+  console.log(date.format("MM-DD-YYYY"))
+  if (user) {
+    uid = user.uid;
+    userLoggedIn = true
+    refreshMeals()
+  } else {
+    userLoggedIn = false
+  }
+});
+
+const hideAddForm = (food) => {
+  showAddModal = false
+  addFoodToList(food)
+}
 </script>
 
 <main>
     <PageHeader title="Snack Diary" dashboard={true} other={{destination: "food", title: "Meal Tracker"}} />
-    <DateSwitcher bind:date onChange={onDateChange} />
+    <DateSwitcher bind:date onChange={refreshMeals} />
 
     {#if loading}
     <LoadingSpinner />
@@ -74,13 +69,13 @@ const onDateChange = async (e) => {
     <div class="snack-content">
         <img src="{mainImage}" alt="exercise" class="page-image">
 
-        <ItemsTable foodType="snacks" data={foodData} />
-            <button class="btn" on:click={() => showModal = true}>Add Food</button>
-            <AddFood foodType="snacks" bind:showModal hideForm={hideForm} date={date} />
-            <MealStats foodType="snacks" data={{}} />
-            </div>
-            {/if}
-            </main>
+        <ItemsTable bind:foodData foodType={foodType} date={date} />
+        <button class="btn" on:click={() => showAddModal = true}>Add Food</button>
+        <AddFood bind:showAddModal foodType={foodType} hideForm={hideAddForm} date={date} foodData={foodData} />
+        <MealStats foodType={foodType} data={{}} />
+    </div>
+    {/if}
+</main>
 
 <style>
 .snack-content {

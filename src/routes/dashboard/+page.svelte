@@ -11,7 +11,7 @@ import {
 } from "../../firebase";
 import {
   getDataFromDB
-} from "../../lib/firebase_functions"
+} from "$lib/firebase_functions"
 import LoadingSpinner from "../../components/LoadingSpinner.svelte";
 import DailyStats from "./components/DailyStats.svelte";
 import TrackerContainer from "./components/TrackerContainer.svelte";

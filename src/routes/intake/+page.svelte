@@ -19,7 +19,7 @@ import {
 } from "../../firebase";
 import {
   logoutUser
-} from "../../lib/firebase_functions";
+} from "$lib/firebase_functions";
 import PageHeader from "../../components/PageHeader.svelte";
 import Modal from "../../components/Modal.svelte";
 import BasicInfo from "./components/BasicInfo.svelte";

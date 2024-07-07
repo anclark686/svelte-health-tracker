@@ -9,7 +9,7 @@ import {
 import {
   auth
 } from '../firebase.js';
-import { logoutUser } from "../lib/firebase_functions.js";
+import { logoutUser } from "$lib/firebase_functions.js";
 
 
 const PARENT_ROUTES = [
