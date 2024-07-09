@@ -30,6 +30,8 @@ let historicalLoading = true
 let userLoggedIn = false
 let uid = null
 let showModal = false;
+let showModalWithEdit = false;
+let edit = false
 let weightAdded = false
 
 let historicalWeightData = {}
@@ -42,7 +44,6 @@ const populateHistoricalWeightData = async () => {
 
   await getHistoricalWeightData(uid).then((data) => {
     historicalWeightData = data
-    console.log(historicalWeightData)
   })
 }
 
@@ -53,10 +54,6 @@ const getWeightGoals = async (weightData, scoreDiffAndLeft) => {
     left
   } = scoreDiffAndLeft
 
-  console.log("get weight goals")
-
-  console.log(weightData)
-
   if (Object.values(weightData).length > 0) {
     goalData = {
       initialWeight: `${weightData.initialWeight} lbs`,
@@ -66,16 +63,10 @@ const getWeightGoals = async (weightData, scoreDiffAndLeft) => {
       difference,
       left,
     }
-
-    console.log("goal data", goalData)
   }
 }
 
 const getWeightStats = async (weightData, scoreDiffAndLeft) => {
-  console.log("get weight stats")
-
-  console.log(weightData)
-
   if (Object.values(weightData).length > 0) {
     statData = {
       initialWeight: `${weightData.initialWeight} lbs`,
@@ -85,8 +76,6 @@ const getWeightStats = async (weightData, scoreDiffAndLeft) => {
       lowestWeight: `${weightData.lowestWeight} lbs`,
       difference: scoreDiffAndLeft.difference,
     }
-
-    console.log("stat data", statData)
   }
 }
 
@@ -125,9 +114,14 @@ onAuthStateChanged(auth, async (user) => {
 });
 
 $: if (weightAdded) {
-  console.log("weight added")
   refreshData()
   weightAdded = false
+}
+
+$: if (showModalWithEdit) {
+  edit = true
+  showModalWithEdit = false
+  showModal = true
 }
 </script>
 
@@ -144,9 +138,9 @@ $: if (weightAdded) {
         </div>
         <ProgressChart />
         <GoalTracker goalData={goalData} goalsLoading={goalsLoading} />
-        <HistoricalWeights bind:selectedDate historicalWeightData={historicalWeightData} historicalLoading={historicalLoading} />
+        <HistoricalWeights bind:selectedDate bind:showModalWithEdit historicalWeightData={historicalWeightData} historicalLoading={historicalLoading} />
         <WeightStatistics statData={statData} statsLoading={statsLoading} />
-        <AddWeightModal bind:showModal bind:weightAdded />
+        <AddWeightModal bind:showModal bind:weightAdded bind:edit selectedDate={selectedDate} />
     </div>
     {/if}
 </main>

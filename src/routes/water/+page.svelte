@@ -25,9 +25,10 @@ let statsLoading = true
 let historicalLoading = true
 let userLoggedIn = false
 let uid = null
-let userData = {}
 
 let showModal = false;
+let showModalWithEdit = false;
+let edit = false
 let waterAdded = false
 let historicalWaterData = {}
 let selectedDate = null
@@ -35,18 +36,18 @@ let statData = {}
 
 const populateHistoricalWaterData = async () => {
   uid = auth.currentUser.uid
+
   await getHistoricalWaterData(uid).then((data) => {
     historicalWaterData = data
-    console.log(historicalWaterData)
   })
 }
 
 const getWaterStats = async () => {
   uid = auth.currentUser.uid
   const today = moment().tz(moment.tz.guess())
+
   await getWaterByDate(uid, today.format("MM-DD-YYYY")).then((data) => {
     statData = data
-    console.log(statData)
   })
 }
 
@@ -55,38 +56,20 @@ const refreshData = async () => {
 
   await populateHistoricalWaterData().then(() => {
       historicalLoading = false
-      loading = false
     })
 
     await getWaterStats().then(() => {
       statsLoading = false
-      loading = false
     })
-
-  // await getPreviousWeightData(uid).then(async (data) => {
-  //   const scoreDiffAndLeft = getScoreDifferenceAndLeft(data)
-
-  //   await getWeightGoals(data, scoreDiffAndLeft).then(() => {
-  //     goalsLoading = false
-  //   })
-
-  //   await getWeightStats(data, scoreDiffAndLeft).then(() => {
-  //     statsLoading = false
-  //   })
-
-  //   await populateHistoricalWeightData().then(() => {
-  //     historicalLoading = false
-  //   })
-
-  //   loading = false
-  // })
 }
 
 onAuthStateChanged(auth, async (user) => {
   if (user) {
     uid = user.uid;
     userLoggedIn = true
-    refreshData()
+    refreshData().then(() => {
+      loading = false
+    })
   } else {
     userLoggedIn = false
     loading = false
@@ -94,9 +77,16 @@ onAuthStateChanged(auth, async (user) => {
 });
 
 $: if (waterAdded) {
-  console.log("water added")
-  // refreshData()
+  refreshData().then(() => {
+      loading = false
+    })
   waterAdded = false
+}
+
+$: if (showModalWithEdit) {
+  edit = true
+  showModalWithEdit = false
+  showModal = true
 }
 </script>
 
@@ -111,9 +101,9 @@ $: if (waterAdded) {
             <button class="btn" on:click={() => showModal = true}>Add Water</button>
         </div>
         <WaterChart />
-        <HistoricalWater bind:selectedDate historicalWaterData={historicalWaterData} historicalLoading={historicalLoading}/>
+        <HistoricalWater bind:selectedDate bind:showModalWithEdit historicalWaterData={historicalWaterData} historicalLoading={historicalLoading}/>
         <WaterStats statData={statData} statsLoading={statsLoading} />
-        <AddWaterModal bind:showModal bind:waterAdded />
+        <AddWaterModal bind:showModal bind:waterAdded bind:edit selectedDate={selectedDate} />
     </div>
     {/if}
 </main>

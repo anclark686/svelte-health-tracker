@@ -8,6 +8,8 @@ import Modal from "../../../components/Modal.svelte";
 
 export let showModal
 export let weightAdded
+export let selectedDate
+export let edit
 
 let date = moment().tz(moment.tz.guess())
 
@@ -21,15 +23,20 @@ const buttonConfig = {
 const addNewWeight = async (e) => {
   const data = getBasicData(e)
   const uid = auth.currentUser.uid
-  console.log(data)
 
-  const response = addWeightToDates(uid, data.weight, date.format("MM-DD-YYYY")).then (async () => {
+  const formattedDate = selectedDate && edit ? selectedDate : date.format("MM-DD-YYYY")
+
+  const response = addWeightToDates(uid, data.weight, formattedDate).then (async () => {
     const response2 = addWeightToMainDetails(uid, data.weight).then(() => {
-      console.log("done")
       showModal = false
       weightAdded = true
+      edit = false
     })
   })
+}
+
+$: if (!showModal) {
+  edit = false
 }
 </script>
 
@@ -37,9 +44,15 @@ const addNewWeight = async (e) => {
   <form action="submit" class="add-weight-form" on:submit|preventDefault={addNewWeight}>
     <Modal bind:showModal buttonConfig={buttonConfig}>
       <div class="header" slot="header">
-        <h2>
-          Enter your new weight:
-        </h2>
+        {#if edit && selectedDate}
+          <h2>
+            Enter new weight for {selectedDate}
+          </h2>
+          {:else}
+          <h2>
+            Enter your new weight:
+          </h2>
+          {/if}
       </div>
       <div class="form-content">
         <label for="weight" class="form-label">New Weight</label>

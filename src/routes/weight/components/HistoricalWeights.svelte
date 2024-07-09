@@ -1,28 +1,18 @@
 <script>
 import moment from "moment-timezone";
-import {
-  onMount
-} from "svelte";
 
-import {
-  auth
-} from "../../../firebase";
+import { formatDate } from "$lib/helper_functions";
 import LoadingSpinner from "../../../components/LoadingSpinner.svelte";
 
-export let historicalWeightData
 export let selectedDate
+export let showModalWithEdit
+export let historicalWeightData
 export let historicalLoading
 
 let formattedDate = ""
 
-const formatDate = () => {
-  const date = new Date(selectedDate)
-  return moment(date).format("dddd, MMMM Do YYYY")
-}
-
 $: if (selectedDate) {
-
-  formattedDate = formatDate()
+  formattedDate = formatDate(selectedDate)
 }
 </script>
 
@@ -43,9 +33,15 @@ $: if (selectedDate) {
         {#if selectedDate}
         <div>
             <h3>{formattedDate}</h3>
-            <p class="result">Weight: {historicalWeightData[selectedDate].weight} lbs</p>
+            {#if historicalWeightData[selectedDate].weight}
+              <p class="result">Weight: {historicalWeightData[selectedDate].weight} lbs</p>
+            {:else}
+              <p class="no-date">No weight recorded for this date.</p>
+            {/if}
         </div>
-
+        <div class="btn-container">
+          <button class="small-btn" on:click={() => showModalWithEdit = true}>Add Weight</button>
+        </div>
         {:else}
         <p class="no-date">Please select a date.</p>
         {/if}
