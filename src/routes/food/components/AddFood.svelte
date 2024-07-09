@@ -345,7 +345,6 @@ h2 {
 
 .mini-content-header {
   background: var(--gradient);
-
   padding: .5rem;
   margin: 0;
   border-radius: 10px 10px 0 0;

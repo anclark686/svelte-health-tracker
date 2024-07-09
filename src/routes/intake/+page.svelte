@@ -24,6 +24,7 @@ import PageHeader from "../../components/PageHeader.svelte";
 import Modal from "../../components/Modal.svelte";
 import BasicInfo from "./components/BasicInfo.svelte";
 import HealthInfo from "./components/HealthInfo.svelte";
+import DateSelector from "../../components/DateSelector.svelte";
 
 const errorMap = {};
 let showModal = true;
@@ -61,6 +62,8 @@ const addExtraData = (data) => {
   data.proteinGoal = data.fatGoal = data.carbsGoal = data.calorieGoal = null;
   data.joined = new Date();
   data.timetamp = new Date();
+  data.initialWeight = data.previousWeight = data.highestWeight = data.lowestWeight = data.currWeight;
+  data.initialWeightInKg = data.previousWeightInKg = data.highestWeightInKg = data.lowestWeightInKg = data.currWeightInKg;
 
   return data
 }

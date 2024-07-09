@@ -29,3 +29,80 @@ export const capitalize = (str) => {
     .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
     .join(' ');
 }
+
+export const getScoreDifferenceAndLeft = (weightData) => {
+  const weightGoal = weightData.weightGoals
+
+  const current = weightData.currWeight
+  const goal = weightData.goalWeight
+  const initial = weightData.initialWeight
+
+  let score = ""
+  let difference = ""
+  let left = ""
+
+  if (weightGoal === "Maintain Weight") {
+    if (initial === current && current === goal) {
+      // they've maintained weight and hit their goal
+      score = "100%"
+      difference = "0 lbs"
+      left = "0 lbs"
+    } else if (current > initial) {
+      // they've gained weight
+      score = `${Math.round((goal / current) * 100)}%`
+      difference = `+${current - initial} lbs`
+      left = `${current - goal} lbs`
+    } else if (current < initial) {
+      // they've lost weight
+      score = `${Math.round((current / goal) * 100)}%`
+      difference = `-${initial - current} lbs`
+      left = `${goal - initial} lbs`
+    }
+  } else if (weightGoal.includes("Loss")) {
+    if (current === initial) {
+      // they've maintained weight
+      score = `${(Math.round((goal / current) * 100))}%`
+      difference = "0 lbs"
+      left = `${initial - goal} lbs`
+    } else if (goal === current || goal > current) {
+      // they've hit their goal
+      score = "100%"
+      difference = `-${initial - goal} lbs`
+      left = "0 lbs"
+    } else if (current > initial) {
+      // they've gained weight when they should have lost
+      score = `${Math.round((goal / current) * 100)}%`
+      difference = `+${current - initial} lbs`
+      left = `${current - goal} lbs`
+    } else {
+      // they've lost weight when they should've
+      score = `${Math.round((goal / current) * 100)}%`
+      difference = `-${initial - current} lbs`
+      left = `${current - goal} lbs`
+    }
+  } else {
+    if (current === initial) {
+      // they've maintained weight
+      score = `${(Math.round((current / goal) * 100))}%`
+      difference = "0 lbs"
+      left = `${goal - initial} lbs`
+    } else if (goal === current || goal > current) {
+      // they've hit their goal
+      score = "100%"
+      difference = `+${goal - initial} lbs`
+      left = "0 lbs"
+    } else if (current > initial) {
+      // they've gained weight when they should've
+      score = `${Math.round((current / goal) * 100)}%`
+      difference = `+${current - initial} lbs`
+      left = `${goal - current} lbs`
+    } else {
+      // they've lost weight when they should've gained
+      score = `${Math.round((current / goal) * 100)}%`
+      difference = `-${initial - current} lbs`
+      left = `${goal - current} lbs`
+    }
+  }
+
+  return {score, difference, left}
+}
