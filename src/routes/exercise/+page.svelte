@@ -40,10 +40,10 @@ onAuthStateChanged(auth, async (user) => {
 
 <main>
     <PageHeader title="Exercise Tracker" dashboard={true} other={{}} />
-    <DateSwitcher bind:date />
+    <DateSwitcher bind:date onChange={() => {}}/>
 
     {#if loading}
-    <LoadingSpinner />
+    <LoadingSpinner pageOrSection="page" />
     {:else}
     <div class="exercise-content">
         <CardioExercise />

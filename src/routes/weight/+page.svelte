@@ -10,14 +10,16 @@ import {
   getHistoricalWeightData,
   getPreviousWeightData
 } from "$lib/firebase_functions"
-import { getScoreDifferenceAndLeft } from "$lib/helper_functions"
+import {
+  getScoreDifferenceAndLeft
+} from "$lib/helper_functions"
 import PageHeader from "../../components/PageHeader.svelte";
 import LoadingSpinner from "../../components/LoadingSpinner.svelte";
 import ProgressChart from "./components/ProgressChart.svelte";
 import GoalTracker from "./components/GoalTracker.svelte";
 import WeightStatistics from "./components/WeightStatistics.svelte";
 import AddWeightModal from "./components/AddWeightModal.svelte";
-  import HistoricalWeights from "./components/HistoricalWeights.svelte";
+import HistoricalWeights from "./components/HistoricalWeights.svelte";
 
 const mainImage = "../src/assets/scale.svg"
 
@@ -45,7 +47,11 @@ const populateHistoricalWeightData = async () => {
 }
 
 const getWeightGoals = async (weightData, scoreDiffAndLeft) => {
-  const { score, difference, left } = scoreDiffAndLeft
+  const {
+    score,
+    difference,
+    left
+  } = scoreDiffAndLeft
 
   console.log("get weight goals")
 
@@ -55,12 +61,12 @@ const getWeightGoals = async (weightData, scoreDiffAndLeft) => {
     goalData = {
       initialWeight: `${weightData.initialWeight} lbs`,
       currentWeight: `${weightData.currWeight} lbs`,
-      goalWeight:`${weightData.goalWeight} lbs`,
+      goalWeight: `${weightData.goalWeight} lbs`,
       score,
       difference,
       left,
     }
-    
+
     console.log("goal data", goalData)
   }
 }
@@ -111,14 +117,12 @@ onAuthStateChanged(auth, async (user) => {
     uid = user.uid;
     userLoggedIn = true
     refreshData()
-    
+
   } else {
     userLoggedIn = false
     loading = false
   }
 });
-
-
 
 $: if (weightAdded) {
   console.log("weight added")
@@ -131,7 +135,7 @@ $: if (weightAdded) {
     <PageHeader title="Weight Tracker" dashboard={true} other={{}} />
 
     {#if loading}
-    <LoadingSpinner />
+    <LoadingSpinner pageOrSection="page" />
     {:else}
     <div class="weight-content">
         <img src="{mainImage}" alt="exercise" class="page-image">

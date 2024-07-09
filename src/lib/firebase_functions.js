@@ -1,5 +1,5 @@
 import { goto } from "$app/navigation";
-import { doc, getDoc, query, collection, getDocs, addDoc, setDoc, deleteDoc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, query, collection, getDocs, addDoc, setDoc, deleteDoc, updateDoc, increment } from "firebase/firestore";
 
 import { auth, db } from "../firebase";
 import { convertWeightToKg, getBasicData } from "../lib/helper_functions";
@@ -20,6 +20,34 @@ export const getDataFromDB = async (uid) => {
   }
 };
 
+// gets the doc stuff that isn't in a folder
+export const getDateInfo = async (uid, date) => {
+  const docRef = doc(db, "users", uid, "dates", date);
+
+  const docSnap = await getDoc(docRef);
+
+  if (docSnap.exists()) {
+    return docSnap.data();
+  } else {
+    // docSnap.data() will be undefined in this case
+    console.log("No such document!");
+    return {};
+  }
+}
+
+export const getHistoricalData = async (uid) => {
+  const querySnapshot = await getDocs(collection(db, "users", uid, "dates"));
+
+  const data = {}
+
+  querySnapshot.forEach((doc) => {
+    data[doc.id] = doc.data()
+  });
+
+  return data
+}
+
+// food stuff
 export const getAllFoodsInFoods = async (uid) => {
   const foodObj = {
     breakfast: [],
@@ -94,9 +122,6 @@ export const addOrEditFoodInDates = async (data, uid, meal, date) => {
 }
 
 export const deleteFoodFromDates = async (uid, food, date) => {
-  console.log(food)
-  console.log(date)
-  console.log(uid)
   const docRef = doc(db, "users", uid, "dates", date, food.meal, food.name.toLowerCase());
 
   await deleteDoc(docRef);
@@ -109,10 +134,6 @@ export const deleteFoodFromFoods = async (uid, food) => {
 }
 
 export const changeQuantityInDates = async (uid, food, date, quantity) => {
-  console.log(food)
-  console.log(date)
-  console.log(uid)
-  console.log(quantity)
   const docRef = doc(db, "users", uid, "dates", date, food.meal, food.name.toLowerCase());
 
   await setDoc(docRef, {
@@ -121,20 +142,24 @@ export const changeQuantityInDates = async (uid, food, date, quantity) => {
   });
 }
 
-export const addWeightToDates = async (uid, weight, date) => {
-  const weightInKg = convertWeightToKg(weight)
+// weight stuff
+export const getHistoricalWeightData = async (uid) => {
+  const data = await getHistoricalData(uid);
 
-  const docRef = doc(db, "users", uid, "dates", date);
-  await setDoc(docRef, {
-    weight,
-    weightInKg
-  });
+  const weightInfo = {}
+
+  for (const date in data) {
+    const { weight, weightInKg } = data[date]
+    weightInfo[date] = { weight, weightInKg }
+  }
+
+  return weightInfo
 }
 
 export const getPreviousWeightData = async (uid) => {
   const response = await getDataFromDB(uid).then(data => {
-    console.log(data)
     const dataObj = {}
+
     dataObj.currWeight = data.currWeight
     dataObj.currWeightInKg = data.currWeightInKg
     dataObj.lowestWeight = data.lowestWeight
@@ -149,11 +174,29 @@ export const getPreviousWeightData = async (uid) => {
     dataObj.goalWeightInKg = data.goalWeightInKg
     dataObj.weightGoals = data.weightGoals
 
-    console.log(dataObj)
     return dataObj
   })
 
   return response
+}
+
+export const addWeightToDates = async (uid, weight, date) => {
+  const weightInKg = convertWeightToKg(weight)
+
+  const docRef = doc(db, "users", uid, "dates", date);
+  await getDateInfo(uid, date).then(async (data) => {
+    if (Object.keys(data).length === 0) {
+      await setDoc(docRef, {
+        weight,
+        weightInKg
+      });
+    } else {
+      await updateDoc(docRef, {
+        weight,
+        weightInKg
+      })
+    }
+  })
 }
 
 export const addWeightToMainDetails = async (uid, weight) => {
@@ -161,7 +204,7 @@ export const addWeightToMainDetails = async (uid, weight) => {
 
   const response = await getPreviousWeightData(uid).then(async (data) => {
     let { currWeight, currWeightInKg, lowestWeight, lowestWeightInKg, highestWeight, highestWeightInKg } = data
-    console.log(data)
+
     const docRef = doc(db, "users", uid);
 
     if (weight < lowestWeight) {
@@ -185,16 +228,53 @@ export const addWeightToMainDetails = async (uid, weight) => {
   })
 }
 
-export const getHistoricalWeightData = async (uid) => {
-  const querySnapshot = await getDocs(collection(db,  "users", uid, "dates"));
+// water stuff
+export const getHistoricalWaterData = async (uid) => {
+  const data = await getHistoricalData(uid);
 
-  const weightInfo = {}
+  const waterInfo = {}
 
-  querySnapshot.forEach((doc) => {
-    // doc.data() is never undefined for query doc snapshots
-    console.log(doc.id, " => ", doc.data());
-    weightInfo[doc.id] = doc.data()
-  });
+  for (const date in data) {
+    const { waterInOunces, waterInCups } = data[date]
+    waterInfo[date] = { waterInOunces, waterInCups }
+  }
 
-  return weightInfo
+  return waterInfo
+}
+
+
+export const addWaterToDates = async (uid, waterData, date) => {
+  const docRef = doc(db, "users", uid, "dates", date);
+
+  const { ounces, cups } = waterData
+
+  await getDateInfo(uid, date).then(async (data) => {
+    if (Object.keys(data).length === 0) {
+      await setDoc(docRef, {
+        waterInOunces: parseInt(ounces),
+        waterInCups: parseInt(cups)
+      });
+    } else {
+      if (data.waterInOunces && data.waterInCups) {
+        await updateDoc(docRef, {
+          waterInOunces: increment(parseInt(ounces)),
+          waterInCups: increment(parseInt(cups))
+        })
+      } else {
+        await updateDoc(docRef, {
+          waterInOunces: parseInt(ounces),
+          waterInCups: parseInt(cups)
+        })
+      }
+    }
+  })
+}
+
+export const getWaterByDate = async (uid, date) => {
+  const data = await getDateInfo(uid, date)
+
+  return {
+    waterInOunces: data.waterInOunces,
+    waterInCups: data.waterInCups
+  }
 }

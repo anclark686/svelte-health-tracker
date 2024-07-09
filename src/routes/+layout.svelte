@@ -49,7 +49,7 @@ onMount(() => {
     {:else}
     <div class="content">
         <PageHeader title="Great things to come!" dashboard={false} other={{}}/>
-        <LoadingSpinner />
+        <LoadingSpinner pageOrSection="page" />
     </div>
     {/if}
 

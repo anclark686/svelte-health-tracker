@@ -14,7 +14,7 @@ const todo = "***TODO***"
 
     <div class="goal-info">
         {#if goalsLoading}
-        <LoadingSpinner />
+        <LoadingSpinner pageOrSection="section" />
         {:else}
         <h3>Are you on the way to meeting your goals?</h3>
         <img src={subImage} alt="goal" class="sub-image">

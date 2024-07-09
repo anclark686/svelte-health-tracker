@@ -102,7 +102,7 @@ const addNewMed = async (e) => {
 <main>
     <PageHeader title="Medication Tracker" dashboard={true} other={{}} />
     {#if loading}
-    <LoadingSpinner />
+    <LoadingSpinner pageOrSection="page" />
     {:else}
     <div class="meds-content">
         <img src="{mainImage}" alt="exercise" class="page-image">

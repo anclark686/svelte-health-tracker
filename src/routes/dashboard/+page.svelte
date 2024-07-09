@@ -44,7 +44,7 @@ onMount(() => {
 <main>
 
     {#if loading}
-    <LoadingSpinner />
+    <LoadingSpinner pageOrSection="page" />
     {:else}
     <PageHeader title="Dashboard" dashboard={false} other={{}} />
     {#if userLoggedIn}

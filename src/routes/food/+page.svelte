@@ -40,7 +40,7 @@ onAuthStateChanged(auth, async (user) => {
 <main>
     <PageHeader title="Meal Tracker" dashboard={true} other={{}} />
     {#if loading}
-    <LoadingSpinner />
+    <LoadingSpinner pageOrSection="page" />
     {:else}
     <div class="food-content">
         <!-- <img src="{mainImage}" alt="exercise" class="page-image"> -->

@@ -10,6 +10,15 @@ export const convertHeightToCm = (height) => {
   return (height * 2.54).toFixed(2).toString();
 };
 
+export const convertOzToCups = (oz) => {
+  return (Math.round(parseInt(oz) / 8)).toString()
+}
+
+export const convertCupsToOz = (cups) => {
+  return (parseInt(cups) * 8).toString()
+}
+
+
 export const getBasicData = (e) => {
   const formData = new FormData(e.target);
   const data = {};

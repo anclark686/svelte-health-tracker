@@ -63,7 +63,7 @@ const hideAddForm = (food) => {
     <PageHeader title="Breakfast Diary" dashboard={true} other={{destination: "food", title: "Meal Tracker"}} />
     <DateSwitcher bind:date onChange={refreshMeals} />
     {#if loading}
-    <LoadingSpinner />
+    <LoadingSpinner pageOrSection="page" />
     {:else}
     <div class="breakfast-content">
         <img src="{mainImage}" alt="breakfast" class="page-image">

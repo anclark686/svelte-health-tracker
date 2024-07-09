@@ -12,7 +12,7 @@ const todo = "***TODO***"
 
     <div class="stats-info">
         {#if statsLoading}
-        <LoadingSpinner />
+        <LoadingSpinner pageOrSection="section" />
         {:else}
         <div class="info-breakdown">
             <div class="info-line">

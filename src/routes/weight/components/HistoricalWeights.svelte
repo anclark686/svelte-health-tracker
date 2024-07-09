@@ -30,7 +30,7 @@ $: if (selectedDate) {
     <h2 class="content-header">View Historical Data</h2>
     <div class="historical-info">
         {#if historicalLoading}
-        <LoadingSpinner />
+        <LoadingSpinner pageOrSection="section"/>
         {:else}
         <label for="dates" class="form-label">Dates:</label>
         {#if Object.keys(historicalWeightData).length !== 0}

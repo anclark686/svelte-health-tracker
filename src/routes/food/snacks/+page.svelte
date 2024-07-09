@@ -65,7 +65,7 @@ const hideAddForm = (food) => {
     <DateSwitcher bind:date onChange={refreshMeals} />
 
     {#if loading}
-    <LoadingSpinner />
+    <LoadingSpinner pageOrSection="page" />
     {:else}
     <div class="snack-content">
         <img src="{mainImage}" alt="exercise" class="page-image">
