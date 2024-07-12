@@ -10,6 +10,7 @@ import {
   deleteDoc,
   updateDoc,
   increment,
+  orderBy
 } from "firebase/firestore";
 
 import { auth, db } from "../firebase";
@@ -23,6 +24,7 @@ export const logoutUser = () => {
 export const getDataFromDB = async (uid) => {
   const docRef = doc(db, "users", uid);
   const docSnap = await getDoc(docRef);
+
   if (docSnap.exists()) {
     return docSnap.data();
   } else {
@@ -300,3 +302,117 @@ export const getWaterByDate = async (uid, date) => {
     waterInCups: data.waterInCups,
   };
 };
+
+// medication stuff
+export const getMedsFromDB = async (uid) => {
+  const data = []
+
+  const q = query(collection(db, "users", uid, "meds"), orderBy("name"));
+
+  const medSnapshot = await getDocs(q);
+
+  medSnapshot.forEach((doc) => {
+    // doc.data() is never undefined for query doc snapshots
+    console.log(doc.id, " => ", doc.data());
+    data.push({
+      ...doc.data(),
+      id: doc.id
+    })
+  });
+
+  return data
+}
+
+export const addMedToUserDB = async (uid, med) => {
+  const medRef = doc(db, "users", uid, "meds", med.name);
+// need to make sure it doesn't exist already
+  await getMedsFromDB(uid).then(async (data) => {
+    if (!Object.keys(data).includes(med.name)) {
+      await setDoc(medRef, med);
+    } else {
+      console.log("med already exists")
+    }
+  })
+}
+
+export const addMedToDates = async (uid, med, date, time) => {
+  await setDoc(doc(db, "users", uid, "dates", date, `${time}Meds`, med.name), med)
+}
+
+export const addMedsToDates = async (uid, meds, date, time) => {
+  const medData = []
+  console.log("infirebase",meds)
+
+  Object.keys(meds).forEach(async (medName) => {
+    const medInfo = { ...meds[medName], id: meds[medName].name, taken: false, time: time }
+
+    medData.push(medInfo)
+
+    addMedToDates(uid, medInfo, date, time)
+  })
+
+  return medData
+}
+
+export const getMedDateInfo = async (uid, date, meds, time) => {
+  let medData = []
+
+  await getDocs(collection(db, "users", uid, "dates", date, `${time}Meds`)).then(async (data) => {
+    if (data.empty) {
+      medData = await addMedsToDates(uid, meds, date, time)
+    } else {
+      data.forEach((doc) => {
+        medData.push({ ...doc.data(), id: doc.id })
+      });
+    }
+  })
+  return medData
+};
+
+export const toggleMedInDb = async (uid, med, date, time) => {
+  const medRef = doc(db, "users", uid, "dates", date, `${time}Meds`, med.name);
+  
+  await updateDoc(medRef, { taken: med.taken })
+} 
+
+export const deleteMedInDb = async (uid, med) => {
+  const medRef = doc(db, "users", uid, "meds", med.name);
+  await deleteDoc(medRef)
+}
+
+
+export const editMedInDb = async (uid, med, prevMed, date) => {
+  if (med.name !== prevMed.name) {
+    await deleteMedInDb(uid, prevMed)
+
+    await addMedToUserDB(uid, med)
+
+    med.times.forEach(async (time) => {
+      console.log("you here?", time)
+      await addMedToDates(uid, med, date, time)
+    })
+    return 
+  }
+
+  const medForMeds = { ...med}
+
+  delete medForMeds.taken
+
+  const medRef = doc(db, "users", uid, "meds", med.name);
+
+  await updateDoc(medRef, medForMeds).then(async () => {
+    const medData = []
+    
+    const medForDates = { ...med}
+
+    medForDates.times.forEach((time) => {
+      medData.push({ ...medForDates, time: time })
+    })
+
+    medData.forEach(async (m) => {
+      const medDateRef = doc(db, "users", uid, "dates", date, `${m.time}Meds`, med.name);
+
+      await updateDoc(medDateRef, m)
+    })
+  })
+}

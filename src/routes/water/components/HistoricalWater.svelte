@@ -1,6 +1,4 @@
 <script>
-import moment from "moment-timezone";
-
 import { formatDate } from "$lib/helper_functions";
 import LoadingSpinner from "../../../components/LoadingSpinner.svelte";
 

@@ -300,9 +300,7 @@ onMount(async () => {
 </div>
 
 <style>
-h2 {
-  color: var(--text-color);
-}
+
 
 .form-content {
   margin-top: 0;

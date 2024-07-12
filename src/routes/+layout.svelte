@@ -77,12 +77,14 @@ onMount(() => {
   --btn-color: var(--sky-blue);
   --gradient: linear-gradient(to right, var(--med-sky-blue), var(--sky-blue), var(--med-sky-blue));
   --error-color: var(--error-dark-red);
+  --error-text: var(--pretty-much-white);
   --header-color: var(--sky-blue);
   --border-color: var(--sky-blue);
   --content-link: var(--dark-sky-blue);
   --table-header: var(--sky-blue);
   --table-every-other: var(--background-color);
   --date-switcher-background: var(--sky-blue);
+  --checkbox-color: var(--sky-blue);
 }
 
 :global(.app-dark) {
@@ -95,12 +97,14 @@ onMount(() => {
   --btn-color: var(--med-sky-blue);
   --gradient: linear-gradient(to right, var(--dark-sky-blue), var(--med-sky-blue), var(--dark-sky-blue));
   --error-color: var(--error-pink);
+  --error-text: var(--darkest-of-blues);
   --header-color: var(--med-sky-blue);
   --border-color: var(--med-sky-blue);
   --content-link: var(--sky-blue);
   --table-header: var(--med-sky-blue);
   --table-every-other: var(--background-color);
   --date-switcher-background: var(--med-sky-blue);
+  --checkbox-color: var(--med-sky-blue);
 }
 
 :global(html),
@@ -133,6 +137,15 @@ onMount(() => {
 :global(body::-webkit-scrollbar-thumb) {
   background: var(--med-sky-blue)
 }
+
+:global(h2) {
+  color: var(--text-color);
+}
+
+:global(input[type="checkbox"]) {
+  accent-color: var(--checkbox-color);
+}
+
 
 .content {
   margin-left: 5rem;
@@ -258,6 +271,12 @@ onMount(() => {
 
 :global(.medium-image) {
   width: 5rem;
+}
+
+@media (max-width: 800px) {
+  :global(.content-box) {
+    width: 80%;
+  }
 }
 
 @media (max-width: 600px) {

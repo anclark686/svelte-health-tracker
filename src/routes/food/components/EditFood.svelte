@@ -123,9 +123,7 @@ $: if (previousFood) title = capitalize(previousFood?.name)
 </div>
 
 <style>
-h2 {
-  color: var(--text-color);
-}
+
 
 .form-content {
   margin-top: 0;

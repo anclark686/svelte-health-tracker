@@ -99,10 +99,6 @@ $: if (!showModal) {
 
   
   <style>
-h2 {
-  color: var(--text-color);
-}
-
 .switch-btn {
   background-color: var(--btn-color);
   color: var(--text-color);
