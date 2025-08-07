@@ -1,158 +1,147 @@
 <script>
-import {
-  onAuthStateChanged
-} from "firebase/auth";
-import {
-  goto
-} from "$app/navigation";
+  import { onAuthStateChanged } from "firebase/auth";
+  import { goto } from "$app/navigation";
 
-import {
-  auth
-} from '../firebase.js';
-import { logoutUser } from "$lib/firebase_functions.js";
+  import { auth } from "../firebase.js";
+  import { logoutUser } from "$lib/firebase_functions.js";
 
+  const PARENT_ROUTES = ["login_register", "food"];
 
-const PARENT_ROUTES = [
-  "login_register",
-  "food",
-]
+  let loading = true;
+  let userLoggedIn = false;
 
+  const logo = "/src/assets/rhc_logo_no_background.svg";
+  const home = "/src/assets/home.svg";
+  const food = "/src/assets/food.svg";
+  const water = "/src/assets/water.svg";
+  const exercise = "/src/assets/exercise.svg";
+  const weight = "/src/assets/weight.svg";
+  const meds = "/src/assets/meds.svg";
+  const mode = "/src/assets/day-and-night.png";
+  const logout = "/src/assets/logout.svg";
+  const login = "/src/assets/log_in.svg";
+  const register = "/src/assets/person.svg";
 
-let loading = true
-let userLoggedIn = false
+  let cookies;
 
-const logo = "/src/assets/rhc_logo_no_background.svg"
-const home = "/src/assets/home.svg"
-const food = "/src/assets/food.svg"
-const water = "/src/assets/water.svg"
-const exercise = "/src/assets/exercise.svg"
-const weight = "/src/assets/weight.svg"
-const meds = "/src/assets/meds.svg"
-const mode = '/src/assets/day-and-night.png'
-const logout = "/src/assets/logout.svg"
-const login = "/src/assets/log_in.svg"
-const register = "/src/assets/person.svg"
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      const uid = user.uid;
+      userLoggedIn = true;
+      loading = false;
+    } else {
+      userLoggedIn = false;
+      loading = false;
+    }
+  });
 
-let cookies
+  const lightDarkMode = () => {
+    const body = document.getElementById("app");
+    body.classList.toggle("app-light");
+    body.classList.toggle("app-dark");
 
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    const uid = user.uid;
-    userLoggedIn = true
-    loading = false
-  } else {
-    userLoggedIn = false
-    loading = false
-  }
-});
+    cookies = document.cookie.split(";");
+    cookies = cookies.filter((cookie) => {
+      !cookie.includes("darkmode");
+    });
+    if (body.classList.contains("app-light")) {
+      cookies.push("darkmode=light");
+    } else {
+      cookies.push("darkmode=dark");
+    }
 
-const lightDarkMode = () => {
-  const body = document.getElementById("app")
-  body.classList.toggle("app-light")
-  body.classList.toggle("app-dark")
-
-  cookies = document.cookie.split(';')
-  cookies = cookies.filter((cookie) => {
-    !cookie.includes("darkmode")
-  })
-  if (body.classList.contains("app-light")) {
-    cookies.push("darkmode=light")
-  } else {
-    cookies.push("darkmode=dark")
-  }
-
-  document.cookie = cookies.join('; ')
-}
+    document.cookie = cookies.join("; ");
+  };
 </script>
 
 <nav class="navbar">
-    {#if !loading}
+  {#if !loading}
     <ul class="navbar-nav">
-        <li class="logo">
-            <a href="/">
-                <img src={logo} alt="logo" class="logo-icon">
+      <li class="logo">
+        <a href="/">
+          <img src={logo} alt="logo" class="logo-icon" />
+        </a>
+      </li>
+
+      {#if userLoggedIn}
+        <span class="middle-group">
+          <li class="nav-item">
+            <a href="/dashboard" class="nav-link">
+              <img src={home} alt="home" class="nav-icon" />
+              <span class="link-text">Dashboard</span>
             </a>
+          </li>
+
+          <li class="nav-item">
+            <a href="/food" class="nav-link">
+              <img src={food} alt="food" class="nav-icon" />
+              <span class="link-text">Meal Tracker</span>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a href="/water" class="nav-link">
+              <img src={water} alt="water" class="nav-icon" />
+              <span class="link-text">Water Tracker</span>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a href="/exercise" class="nav-link">
+              <img src={exercise} alt="exercise" class="nav-icon" />
+              <span class="link-text">Exercise Tracker</span>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a href="/weight" class="nav-link">
+              <img src={weight} alt="weight" class="nav-icon" />
+              <span class="link-text">Weight Tracker</span>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a href="/meds" class="nav-link">
+              <img src={meds} alt="meds" class="nav-icon" />
+              <span class="link-text">Med Tracker</span>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <button class="nav-button" on:click={logoutUser}>
+              <img src={logout} alt="logout" class="nav-icon" />
+              <span class="link-text">Logout</span>
+            </button>
+          </li>
+        </span>
+      {:else}
+        <span class="middle-group">
+          <li class="nav-item">
+            <a href="/login_register/login" class="nav-link">
+              <img src={login} alt="login" class="nav-icon" />
+              <span class="link-text">Login</span>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a href="/login_register/register" class="nav-link">
+              <img src={register} alt="register" class="nav-icon" />
+              <span class="link-text">Register</span>
+            </a>
+          </li>
+        </span>
+      {/if}
+
+      <span class="last-item">
+        <li class="nav-item">
+          <button class="nav-button" on:click={lightDarkMode}>
+            <img src={mode} alt="dark - light" class="nav-icon" />
+            <span class="link-text">Light / Dark</span>
+          </button>
         </li>
-
-        {#if userLoggedIn}
-        <span class="middle-group">
-            <li class="nav-item">
-                <a href="/dashboard" class="nav-link">
-                    <img src={home} alt="home" class="nav-icon">
-                    <span class="link-text">Dashboard</span>
-                </a>
-            </li>
-
-            <li class="nav-item">
-                <a href="/food" class="nav-link">
-                    <img src={food} alt="food" class="nav-icon">
-                    <span class="link-text">Meal Tracker</span>
-                </a>
-            </li>
-
-            <li class="nav-item">
-                <a href="/water" class="nav-link">
-                    <img src={water} alt="water" class="nav-icon">
-                    <span class="link-text">Water Tracker</span>
-                </a>
-            </li>
-
-            <li class="nav-item">
-                <a href="/exercise" class="nav-link">
-                    <img src={exercise} alt="exercise" class="nav-icon">
-                    <span class="link-text">Exercise Tracker</span>
-                </a>
-            </li>
-
-            <li class="nav-item">
-                <a href="/weight" class="nav-link">
-                    <img src={weight} alt="weight" class="nav-icon">
-                    <span class="link-text">Weight Tracker</span>
-                </a>
-            </li>
-
-            <li class="nav-item">
-                <a href="/meds" class="nav-link">
-                    <img src={meds} alt="meds" class="nav-icon">
-                    <span class="link-text">Med Tracker</span>
-                </a>
-            </li>
-
-            <li class="nav-item">
-                <button class="nav-button" on:click={logoutUser}>
-                    <img src={logout} alt="logout" class="nav-icon">
-                    <span class="link-text">Logout</span>
-                </button>
-            </li>
-        </span>
-        {:else}
-        <span class="middle-group">
-            <li class="nav-item">
-                <a href="/login_register/login" class="nav-link">
-                    <img src={login} alt="login" class="nav-icon">
-                    <span class="link-text">Login</span>
-                </a>
-            </li>
-
-            <li class="nav-item">
-                <a href="/login_register/register" class="nav-link">
-                    <img src={register} alt="register" class="nav-icon">
-                    <span class="link-text">Register</span>
-                </a>
-            </li>
-        </span>
-        {/if}
-
-        <span class="last-item">
-            <li class="nav-item">
-                <button class="nav-button" on:click={lightDarkMode}>
-                    <img src={mode} alt="dark - light" class="nav-icon">
-                    <span class="link-text">Light / Dark</span>
-                </button>
-            </li>
-        </span>
+      </span>
     </ul>
-    {/if}
+  {/if}
 </nav>
 
 <style>
@@ -171,7 +160,7 @@ const lightDarkMode = () => {
   .navbar:hover .link-text {
     display: block;
     white-space: nowrap;
-    animation: fadeIn .5s;
+    animation: fadeIn 0.5s;
   }
 
   .navbar-nav {
@@ -239,7 +228,7 @@ const lightDarkMode = () => {
     border: none;
     cursor: pointer;
     font-size: 16px;
-    font-family: 'Josefin Sans', sans-serif;
+    font-family: "Josefin Sans", sans-serif;
   }
 
   @media (max-width: 600px) {
@@ -257,7 +246,7 @@ const lightDarkMode = () => {
 
     .navbar:hover .nav-item {
       display: block;
-      animation: fadeIn .5s;
+      animation: fadeIn 0.5s;
     }
 
     .navbar-nav {
@@ -277,7 +266,7 @@ const lightDarkMode = () => {
     }
 
     .logo {
-      margin: .5rem auto;
+      margin: 0.5rem auto;
       width: 5rem;
       height: 5rem;
     }

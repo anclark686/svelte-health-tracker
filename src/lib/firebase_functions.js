@@ -325,7 +325,7 @@ export const getMedsFromDB = async (uid) => {
 
 export const addMedToUserDB = async (uid, med) => {
   const medRef = doc(db, "users", uid, "meds", med.name);
-// need to make sure it doesn't exist already
+  // need to make sure it doesn't exist already
   await getMedsFromDB(uid).then(async (data) => {
     if (!Object.keys(data).includes(med.name)) {
       await setDoc(medRef, med);
@@ -341,7 +341,7 @@ export const addMedToDates = async (uid, med, date, time) => {
 
 export const addMedsToDates = async (uid, meds, date, time) => {
   const medData = []
-  console.log("infirebase",meds)
+  console.log("infirebase", meds)
 
   Object.keys(meds).forEach(async (medName) => {
     const medInfo = { ...meds[medName], id: meds[medName].name, taken: false, time: time }
@@ -366,14 +366,15 @@ export const getMedDateInfo = async (uid, date, meds, time) => {
       });
     }
   })
+
   return medData
 };
 
 export const toggleMedInDb = async (uid, med, date, time) => {
   const medRef = doc(db, "users", uid, "dates", date, `${time}Meds`, med.name);
-  
+
   await updateDoc(medRef, { taken: med.taken })
-} 
+}
 
 export const deleteMedInDb = async (uid, med) => {
   const medRef = doc(db, "users", uid, "meds", med.name);
@@ -391,10 +392,10 @@ export const editMedInDb = async (uid, med, prevMed, date) => {
       console.log("you here?", time)
       await addMedToDates(uid, med, date, time)
     })
-    return 
+    return
   }
 
-  const medForMeds = { ...med}
+  const medForMeds = { ...med }
 
   delete medForMeds.taken
 
@@ -402,8 +403,8 @@ export const editMedInDb = async (uid, med, prevMed, date) => {
 
   await updateDoc(medRef, medForMeds).then(async () => {
     const medData = []
-    
-    const medForDates = { ...med}
+
+    const medForDates = { ...med }
 
     medForDates.times.forEach((time) => {
       medData.push({ ...medForDates, time: time })

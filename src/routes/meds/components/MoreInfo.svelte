@@ -60,7 +60,7 @@ const closeModalAndOpenEdit = () => {
 
       <div class="info-line">
         <p class="left">Taken for:</p>
-        <p class="right">{capitalize(selectedMed.for)}</p>
+        <p class="right">{capitalize(selectedMed.takenFor)}</p>
       </div>
 
       <div class="info-line">

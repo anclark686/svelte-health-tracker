@@ -1,5 +1,4 @@
 <script>
-
 </script>
 
 <div class="weight-progress-container content-box">
@@ -10,7 +9,7 @@
 </div>
 
 <style>
-.progress-info {
-  margin: 1rem;
-}
+  .progress-info {
+    margin: 1rem;
+  }
 </style>

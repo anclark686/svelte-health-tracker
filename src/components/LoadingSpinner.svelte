@@ -1,14 +1,23 @@
 <script>
-  export let pageOrSection
+  export let pageOrSection;
 </script>
 
-<div class={pageOrSection === "page" ? "loader-container" : "loader-section-container"}>
-  <div class={pageOrSection === "page" ? "page-loader loader" : "section-loader loader"}></div>
+<div
+  class={pageOrSection === "page"
+    ? "loader-container"
+    : "loader-section-container"}
+>
+  <div
+    class={pageOrSection === "page"
+      ? "page-loader loader"
+      : "section-loader loader"}
+  ></div>
   <h1>&nbsp;Loading...</h1>
 </div>
 
 <style>
-  .loader-container, .loader-section-container {
+  .loader-container,
+  .loader-section-container {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -19,7 +28,7 @@
   }
   .loader {
     border: 8px solid var(--text-color);
-    
+
     border-radius: 50%;
     width: 25px;
     height: 25px;
@@ -35,7 +44,11 @@
   }
 
   @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
   }
 </style>

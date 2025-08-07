@@ -1,115 +1,125 @@
 <script>
-import { formatDate } from "$lib/helper_functions";
-import LoadingSpinner from "../../../components/LoadingSpinner.svelte";
+  import { formatDate } from "$lib/helper_functions";
+  import LoadingSpinner from "../../../components/LoadingSpinner.svelte";
 
-export let selectedDate
-export let showModalWithEdit
-export let historicalWaterData
-export let historicalLoading
+  export let selectedDate;
+  export let showModalWithEdit;
+  export let historicalWaterData;
+  export let historicalLoading;
 
-let formattedDate = ""
+  let formattedDate = "";
 
-$: if (selectedDate) {
-  formattedDate = formatDate(selectedDate)
-}
+  $: if (selectedDate) {
+    formattedDate = formatDate(selectedDate);
+  }
 </script>
 
 <div class="weight-progress-container content-box">
-    <h2 class="content-header">View Historical Data</h2>
-    <div class="historical-info">
-        {#if historicalLoading}
-        <LoadingSpinner pageOrSection="section"/>
-        {:else}
-            <label for="dates" class="form-label">Dates:</label>
-            {#if Object.keys(historicalWaterData).length !== 0}
-            <select name="dates" id="dates" class="form-input" on:change={(e) => selectedDate = e.currentTarget.value}>
-                <option value="">Select One</option>
-                {#each Object.keys(historicalWaterData) as date}
-                <option value={date}>{date}</option>
-                {/each}
-            </select>
-            {#if selectedDate}
-            <div class="info-breakdown">
-                <h3>{formattedDate}</h3>
-                {#if historicalWaterData[selectedDate].waterInOunces && historicalWaterData[selectedDate].waterInCups}
-                <div class="info-line">
-                    <p class="left">Water In Ounces:</p>
-                    <p class="right">{historicalWaterData[selectedDate].waterInOunces} oz</p>
-                </div>
+  <h2 class="content-header">View Historical Data</h2>
+  <div class="historical-info">
+    {#if historicalLoading}
+      <LoadingSpinner pageOrSection="section" />
+    {:else}
+      <label for="dates" class="form-label">Dates:</label>
+      {#if Object.keys(historicalWaterData).length !== 0}
+        <select
+          name="dates"
+          id="dates"
+          class="form-input"
+          on:change={(e) => (selectedDate = e.currentTarget.value)}
+        >
+          <option value="">Select One</option>
+          {#each Object.keys(historicalWaterData) as date}
+            <option value={date}>{date}</option>
+          {/each}
+        </select>
+        {#if selectedDate}
+          <div class="info-breakdown">
+            <h3>{formattedDate}</h3>
+            {#if historicalWaterData[selectedDate].waterInOunces && historicalWaterData[selectedDate].waterInCups}
+              <div class="info-line">
+                <p class="left">Water In Ounces:</p>
+                <p class="right">
+                  {historicalWaterData[selectedDate].waterInOunces} oz
+                </p>
+              </div>
 
-                <div class="info-line">
-                    <p class="left">Water In Cups:</p>
-                    <p class="right">{historicalWaterData[selectedDate].waterInCups} cups</p>
-                </div>
-
-                {:else}
-                <p class="no-date">No water intake recorded for this date.</p>
-                {/if}
-                <div class="btn-container">
-                  <button class="small-btn" on:click={() => showModalWithEdit = true}>Add Water</button>
-                </div>
-            </div>
+              <div class="info-line">
+                <p class="left">Water In Cups:</p>
+                <p class="right">
+                  {historicalWaterData[selectedDate].waterInCups} cups
+                </p>
+              </div>
             {:else}
-            <p class="no-date">Please select a date.</p>
-          {/if}
+              <p class="no-date">No water intake recorded for this date.</p>
+            {/if}
+            <div class="btn-container">
+              <button
+                class="small-btn"
+                on:click={() => (showModalWithEdit = true)}>Add Water</button
+              >
+            </div>
+          </div>
+        {:else}
+          <p class="no-date">Please select a date.</p>
         {/if}
       {/if}
-    </div>
+    {/if}
+  </div>
 </div>
 
-  
 <style>
-.historical-info {
-  margin: 1rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
+  .historical-info {
+    margin: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
 
-.no-date {
-  font-size: 1.25rem;
-}
+  .no-date {
+    font-size: 1.25rem;
+  }
 
-.info-breakdown {
-  width: 75%;
-}
-
-.info-breakdown p {
-  margin: .5rem;
-  font-size: 1.2rem;
-  color: var(--text-color);
-}
-
-.info-line {
-  display: flex;
-  justify-content: space-between;
-  margin: 0 5rem;
-}
-
-.left {
-  font-weight: bold;
-  text-align: left;
-}
-
-.right {
-  text-align: right;
-}
-
-@media (max-width: 800px) {
   .info-breakdown {
-    width: 90%;
+    width: 75%;
+  }
+
+  .info-breakdown p {
+    margin: 0.5rem;
+    font-size: 1.2rem;
+    color: var(--text-color);
   }
 
   .info-line {
-    width: 90%;
-    margin: 0 1rem;
+    display: flex;
+    justify-content: space-between;
+    margin: 0 5rem;
   }
-}
 
-@media (max-width: 600px) {
-  .info-line {
-    margin: 0 1rem;
+  .left {
+    font-weight: bold;
+    text-align: left;
   }
-}
+
+  .right {
+    text-align: right;
+  }
+
+  @media (max-width: 800px) {
+    .info-breakdown {
+      width: 90%;
+    }
+
+    .info-line {
+      width: 90%;
+      margin: 0 1rem;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .info-line {
+      margin: 0 1rem;
+    }
+  }
 </style>
