@@ -37,7 +37,7 @@
     calories = allCalories;
   };
 
-  const title = capitalize(foodType);
+  const title = foodType !== "snacks" ? capitalize(foodType) : "Snack";
 
   $: if (data) {
     console.log("herrrrreeee");

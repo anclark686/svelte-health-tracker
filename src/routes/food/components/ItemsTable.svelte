@@ -16,7 +16,7 @@
   let showEditModal = false;
   let previousFood = null;
 
-  const title = capitalize(foodType);
+  const title = foodType !== "snacks" ? capitalize(foodType) : "Snack";
 
   const editFood = (food) => {
     console.log(food);

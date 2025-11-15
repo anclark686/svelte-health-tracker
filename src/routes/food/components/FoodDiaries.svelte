@@ -28,7 +28,7 @@
 
     <div class="diary-row">
       <img src={snacks} alt="snacks" class="diary-icon" />
-      <a href="/food/snacks" class="content-link">Snack Diary</a>
+      <a href="/food/snacks" class="content-link">Snacks Diary</a>
     </div>
 
     <div class="diary-row">

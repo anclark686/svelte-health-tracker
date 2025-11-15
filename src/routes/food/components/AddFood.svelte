@@ -167,12 +167,13 @@
       <div class="header" slot="header">
         <img src={foodImg} alt="food" class="medium-image" />
         <h2>
-          Add Food for {title}
+          Add {title}
         </h2>
       </div>
+
       <div class="btn-container">
         <button class="small-btn" on:click={switchToManual}
-          >{!searchPage ? "Use Previous Foods" : "Manual Entry"}</button
+          >{!searchPage ? "Add Previous Food" : "Manual Entry"}</button
         >
       </div>
       {#if !searchPage}

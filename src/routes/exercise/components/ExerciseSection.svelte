@@ -1,19 +1,21 @@
 <script>
+  import { capitalize } from "$lib/helper_functions";
   const todo = "***TODO***";
-
-  const image = "../../src/assets/cardio.svg";
 
   export let showAddModal;
   export let type;
+  export let sectionType;
+  export let image
 
-  const showAddModalHandler = () => {
+  const modalHandler = () => {
     showAddModal = true;
-    type = "cardio";
+    type = sectionType;
+    console.log("Modal opened for type:", type);
   };
 </script>
 
 <div class="meal-stats-container content-box">
-  <h2 class="content-header">Cardio Exercises</h2>
+  <h2 class="content-header">{capitalize(sectionType)} Exercises</h2>
 
   <img src={image} alt="cardio" class="sub-image" />
 
@@ -47,7 +49,7 @@
   </div>
 
   <div class="btn-container">
-    <button class="btn" on:click={showAddModalHandler}>Add Exercise</button>
+    <button class="btn" on:click={modalHandler}>Add Exercise</button>
   </div>
 </div>
 

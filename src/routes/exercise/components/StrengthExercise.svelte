@@ -2,6 +2,9 @@
   const todo = "***TODO***";
 
   const image = "../../src/assets/strength.svg";
+
+  export let showAddModal;
+  export let type = "";
 </script>
 
 <div class="meal-stats-container content-box">
@@ -39,7 +42,7 @@
   </div>
 
   <div class="btn-container">
-    <button class="btn">Add Exercise</button>
+    <button class="btn" on:click={() => showAddModal = true}>Add Exercise</button>
   </div>
 </div>
 
