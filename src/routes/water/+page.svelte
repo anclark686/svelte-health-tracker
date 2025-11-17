@@ -1,20 +1,17 @@
 <script>
-  import { onAuthStateChanged } from "firebase/auth";
-  import moment from "moment-timezone";
+  import { onAuthStateChanged } from 'firebase/auth';
+  import moment from 'moment-timezone';
 
-  import { auth } from "../../firebase";
-  import {
-    getHistoricalWaterData,
-    getWaterByDate,
-  } from "$lib/firebase_functions";
-  import PageHeader from "../../components/PageHeader.svelte";
-  import LoadingSpinner from "../../components/LoadingSpinner.svelte";
-  import AddWaterModal from "./components/AddWaterModal.svelte";
-  import WaterChart from "./components/WaterChart.svelte";
-  import HistoricalWater from "./components/HistoricalWater.svelte";
-  import WaterStats from "./components/WaterStats.svelte";
+  import { auth } from '../../firebase';
+  import { getHistoricalWaterData, getWaterByDate } from '$lib/firebase_functions';
+  import PageHeader from '../../components/PageHeader.svelte';
+  import LoadingSpinner from '../../components/LoadingSpinner.svelte';
+  import AddWaterModal from './components/AddWaterModal.svelte';
+  import WaterChart from './components/WaterChart.svelte';
+  import HistoricalWater from './components/HistoricalWater.svelte';
+  import WaterStats from './components/WaterStats.svelte';
 
-  const mainImage = "../src/assets/water_glass.svg";
+  const mainImage = '../src/assets/water_glass.svg';
 
   let loading = true;
   let statsLoading = true;
@@ -42,7 +39,7 @@
     uid = auth.currentUser.uid;
     const today = moment().tz(moment.tz.guess());
 
-    await getWaterByDate(uid, today.format("MM-DD-YYYY")).then((data) => {
+    await getWaterByDate(uid, today.format('MM-DD-YYYY')).then((data) => {
       statData = data;
     });
   };
@@ -87,15 +84,24 @@
 </script>
 
 <main>
-  <PageHeader title="Water Tracker" dashboard={true} other={{}} />
+  <PageHeader
+    title="Water Tracker"
+    dashboard={true}
+    other={{}}
+  />
   {#if loading}
     <LoadingSpinner pageOrSection="page" />
   {:else}
     <div class="water-content">
-      <img src={mainImage} alt="exercise" class="page-image" />
+      <img
+        src={mainImage}
+        alt="exercise"
+        class="page-image"
+      />
       <div class="btn-container">
-        <button class="btn" on:click={() => (showModal = true)}
-          >Add Water</button
+        <button
+          class="btn"
+          on:click={() => (showModal = true)}>Add Water</button
         >
       </div>
       <WaterChart />
@@ -105,8 +111,16 @@
         {historicalWaterData}
         {historicalLoading}
       />
-      <WaterStats {statData} {statsLoading} />
-      <AddWaterModal bind:showModal bind:waterAdded bind:edit {selectedDate} />
+      <WaterStats
+        {statData}
+        {statsLoading}
+      />
+      <AddWaterModal
+        bind:showModal
+        bind:waterAdded
+        bind:edit
+        {selectedDate}
+      />
     </div>
   {/if}
 </main>

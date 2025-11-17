@@ -2,16 +2,8 @@
   export let pageOrSection;
 </script>
 
-<div
-  class={pageOrSection === "page"
-    ? "loader-container"
-    : "loader-section-container"}
->
-  <div
-    class={pageOrSection === "page"
-      ? "page-loader loader"
-      : "section-loader loader"}
-  ></div>
+<div class={pageOrSection === 'page' ? 'loader-container' : 'loader-section-container'}>
+  <div class={pageOrSection === 'page' ? 'page-loader loader' : 'section-loader loader'}></div>
   <h1>&nbsp;Loading...</h1>
 </div>
 

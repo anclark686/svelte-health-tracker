@@ -1,12 +1,12 @@
 <script>
-  import LoadingSpinner from "../../../components/LoadingSpinner.svelte";
+  import LoadingSpinner from '../../../components/LoadingSpinner.svelte';
 
   export let goalData;
   export let goalsLoading;
 
-  const subImage = "../src/assets/goal.svg";
+  const subImage = '../src/assets/goal.svg';
 
-  const todo = "***TODO***";
+  const todo = '***TODO***';
 </script>
 
 <div class="weight-goal-container content-box">
@@ -17,7 +17,11 @@
       <LoadingSpinner pageOrSection="section" />
     {:else}
       <h3>Are you on the way to meeting your goals?</h3>
-      <img src={subImage} alt="goal" class="sub-image" />
+      <img
+        src={subImage}
+        alt="goal"
+        class="sub-image"
+      />
       <div class="info-breakdown">
         <div class="info-line">
           <p class="left">Initial Weight:</p>

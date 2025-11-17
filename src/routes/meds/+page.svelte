@@ -1,8 +1,8 @@
 <script>
-  import { onAuthStateChanged } from "firebase/auth";
-  import moment from "moment-timezone";
+  import { onAuthStateChanged } from 'firebase/auth';
+  import moment from 'moment-timezone';
 
-  import { auth, db } from "../../firebase";
+  import { auth, db } from '../../firebase';
   import {
     getMedsFromDB,
     addMedToUserDB,
@@ -11,17 +11,17 @@
     toggleMedInDb,
     editMedInDb,
     deleteMedInDb,
-  } from "$lib/firebase_functions";
-  import { getBasicData } from "$lib/helper_functions";
-  import PageHeader from "../../components/PageHeader.svelte";
-  import LoadingSpinner from "../../components/LoadingSpinner.svelte";
-  import MedInfo from "./components/MedInfo.svelte";
-  import AddMed from "./components/AddMed.svelte";
-  import MoreInfo from "./components/MoreInfo.svelte";
-  import DateSwitcher from "../../components/DateSwitcher.svelte";
+  } from '$lib/firebase_functions';
+  import { getBasicData } from '$lib/helper_functions';
+  import PageHeader from '../../components/PageHeader.svelte';
+  import LoadingSpinner from '../../components/LoadingSpinner.svelte';
+  import MedInfo from './components/MedInfo.svelte';
+  import AddMed from './components/AddMed.svelte';
+  import MoreInfo from './components/MoreInfo.svelte';
+  import DateSwitcher from '../../components/DateSwitcher.svelte';
 
-  const mainImage = "../src/assets/pills.svg";
-  const TIMES = ["morning", "afternoon", "evening", "night"];
+  const mainImage = '../src/assets/pills.svg';
+  const TIMES = ['morning', 'afternoon', 'evening', 'night'];
 
   let loading = true;
   let userLoggedIn = false;
@@ -48,7 +48,7 @@
 
       await getMeds().then(() => {
         loading = false;
-        console.log("done", medData);
+        console.log('done', medData);
       });
     } else {
       userLoggedIn = false;
@@ -57,16 +57,16 @@
   });
 
   const sortIntoTimes = (med) => {
-    if (med.times.includes("morning")) {
+    if (med.times.includes('morning')) {
       medData.morning[med.name] = med;
     }
-    if (med.times.includes("afternoon")) {
+    if (med.times.includes('afternoon')) {
       medData.afternoon[med.name] = med;
     }
-    if (med.times.includes("evening")) {
+    if (med.times.includes('evening')) {
       medData.evening[med.name] = med;
     }
-    if (med.times.includes("night")) {
+    if (med.times.includes('night')) {
       medData.night[med.name] = med;
     }
   };
@@ -81,21 +81,15 @@
       });
 
       TIMES.forEach(async (time) => {
-        await getMedDateInfo(
-          uid,
-          date.format("MM-DD-YYYY"),
-          medData[time],
-          time
-        ).then((dataWithDates) => {
-          dataWithDates.forEach((med) => {
-            if (
-              medNames.includes(med.name) &&
-              medData[time][med.name]?.times.includes(time)
-            ) {
-              medData[time][med.name] = med;
-            }
-          });
-        });
+        await getMedDateInfo(uid, date.format('MM-DD-YYYY'), medData[time], time).then(
+          (dataWithDates) => {
+            dataWithDates.forEach((med) => {
+              if (medNames.includes(med.name) && medData[time][med.name]?.times.includes(time)) {
+                medData[time][med.name] = med;
+              }
+            });
+          },
+        );
       });
     });
   };
@@ -107,9 +101,7 @@
     newMed.name = newMed.name.toLowerCase();
     newMed.times = times;
     const tempDate = new Date(newMed.lastFilled);
-    newMed.lastFilled = moment(tempDate)
-      .tz(moment.tz.guess())
-      .format("MM-DD-YYYY");
+    newMed.lastFilled = moment(tempDate).tz(moment.tz.guess()).format('MM-DD-YYYY');
 
     showAddModal = false;
     loading = true;
@@ -119,13 +111,11 @@
     times.forEach(async (time) => {
       newMed.taken = false;
 
-      await addMedToDates(uid, newMed, date.format("MM-DD-YYYY"), time).then(
-        async () => {
-          await getMeds().then(() => {
-            loading = false;
-          });
-        }
-      );
+      await addMedToDates(uid, newMed, date.format('MM-DD-YYYY'), time).then(async () => {
+        await getMeds().then(() => {
+          loading = false;
+        });
+      });
     });
   };
 
@@ -139,13 +129,11 @@
     showAddModal = false;
     loading = true;
 
-    await editMedInDb(uid, med, selectedMed, date.format("MM-DD-YYYY")).then(
-      async () => {
-        await getMeds().then(() => {
-          loading = false;
-        });
-      }
-    );
+    await editMedInDb(uid, med, selectedMed, date.format('MM-DD-YYYY')).then(async () => {
+      await getMeds().then(() => {
+        loading = false;
+      });
+    });
 
     if (med.name !== selectedMed.name) {
       TIMES.forEach((time) => {
@@ -178,7 +166,7 @@
   };
 
   const toggleMed = async (med, time) => {
-    await toggleMedInDb(uid, med, date.format("MM-DD-YYYY"), time);
+    await toggleMedInDb(uid, med, date.format('MM-DD-YYYY'), time);
   };
 
   $: if (showModalWithEdit) {
@@ -194,20 +182,37 @@
 </script>
 
 <main>
-  <PageHeader title="Medication Tracker" dashboard={true} other={{}} />
-  <DateSwitcher bind:date onChange={getDailyMeds} />
+  <PageHeader
+    title="Medication Tracker"
+    dashboard={true}
+    other={{}}
+  />
+  <DateSwitcher
+    bind:date
+    onChange={getDailyMeds}
+  />
   {#if loading}
     <LoadingSpinner pageOrSection="page" />
   {:else}
     <div class="meds-content">
-      <img src={mainImage} alt="exercise" class="page-image" />
+      <img
+        src={mainImage}
+        alt="exercise"
+        class="page-image"
+      />
       <div class="btn-container">
-        <button class="btn" on:click={() => (showAddModal = true)}
-          >+ Add New</button
+        <button
+          class="btn"
+          on:click={() => (showAddModal = true)}>+ Add New</button
         >
       </div>
 
-      <MedInfo bind:selectedMed bind:moreInfoClicked {medData} {toggleMed} />
+      <MedInfo
+        bind:selectedMed
+        bind:moreInfoClicked
+        {medData}
+        {toggleMed}
+      />
       <AddMed
         bind:showModal={showAddModal}
         bind:edit

@@ -1,13 +1,13 @@
 <script>
-  const todo = "***TODO***";
+  const todo = '***TODO***';
 
   const ACTIVITY_LEVELS = [
-    "Sedentary",
-    "Light Activity",
-    "Moderate Activity",
-    "Daily Activity",
-    "Very Active",
-    "Intense Activity",
+    'Sedentary',
+    'Light Activity',
+    'Moderate Activity',
+    'Daily Activity',
+    'Very Active',
+    'Intense Activity',
   ];
 </script>
 
@@ -16,8 +16,15 @@
   <div class="calorie-info">
     <div class="info-breakdown">
       <div class="select-container">
-        <label for="activityLevel" class="form-label">Activity Level</label>
-        <select name="activityLevel" id="activityLevel" class="form-input">
+        <label
+          for="activityLevel"
+          class="form-label">Activity Level</label
+        >
+        <select
+          name="activityLevel"
+          id="activityLevel"
+          class="form-input"
+        >
           <option value="">Select One</option>
           {#each ACTIVITY_LEVELS as activity}
             <option value={activity}>{activity}</option>

@@ -1,12 +1,9 @@
 <script>
-  import { capitalize } from "$lib/helper_functions";
+  import { capitalize } from '$lib/helper_functions';
 
-  import {
-    deleteFoodFromDates,
-    changeQuantityInDates,
-  } from "$lib/firebase_functions";
-  import { auth } from "../../../firebase";
-  import EditFood from "../components/EditFood.svelte";
+  import { deleteFoodFromDates, changeQuantityInDates } from '$lib/firebase_functions';
+  import { auth } from '../../../firebase';
+  import EditFood from '../components/EditFood.svelte';
 
   export let foodData;
   export let foodType;
@@ -16,7 +13,7 @@
   let showEditModal = false;
   let previousFood = null;
 
-  const title = foodType !== "snacks" ? capitalize(foodType) : "Snack";
+  const title = foodType !== 'snacks' ? capitalize(foodType) : 'Snack';
 
   const editFood = (food) => {
     console.log(food);
@@ -29,15 +26,13 @@
     console.log(food);
     uid = auth.currentUser.uid;
     food.meal = foodType;
-    const response = await deleteFoodFromDates(
-      uid,
-      food,
-      date.format("MM-DD-YYYY")
-    ).then(async () => {
-      console.log("done");
-      // const response2 = await refreshMeals()
-      foodData = foodData.filter((item) => item.name !== food.name);
-    });
+    const response = await deleteFoodFromDates(uid, food, date.format('MM-DD-YYYY')).then(
+      async () => {
+        console.log('done');
+        // const response2 = await refreshMeals()
+        foodData = foodData.filter((item) => item.name !== food.name);
+      },
+    );
   };
 
   const changeQuantity = async (food, addOrSubtract) => {
@@ -47,19 +42,19 @@
     let tempList = [];
     food.meal = foodType;
 
-    if (addOrSubtract === "add") {
+    if (addOrSubtract === 'add') {
       quantity = (ogQuantity + 1).toString();
-    } else if (addOrSubtract === "subtract") {
+    } else if (addOrSubtract === 'subtract') {
       quantity = (ogQuantity - 1).toString();
     }
 
     const response = await changeQuantityInDates(
       uid,
       food,
-      date.format("MM-DD-YYYY"),
-      quantity
+      date.format('MM-DD-YYYY'),
+      quantity,
     ).then(() => {
-      console.log("done");
+      console.log('done');
       foodData.forEach((item) => {
         if (item.name == food.name) {
           item.quantity = quantity;
@@ -97,7 +92,7 @@
       </thead>
       <tbody>
         {#each foodData as food, i}
-          <tr class={i % 2 === 0 ? "even-row" : "odd-row"}>
+          <tr class={i % 2 === 0 ? 'even-row' : 'odd-row'}>
             <td>{capitalize(food.name)}</td>
             <td>{food.calories}</td>
             <td>{food.protein}</td>
@@ -106,20 +101,22 @@
             <td>
               <button
                 class="emoji-btn plus-minus"
-                on:click={() => changeQuantity(food, "subtract")}>➖</button
+                on:click={() => changeQuantity(food, 'subtract')}>➖</button
               >
               {food.quantity}
               <button
                 class="emoji-btn plus-minus"
-                on:click={() => changeQuantity(food, "add")}>➕</button
+                on:click={() => changeQuantity(food, 'add')}>➕</button
               >
             </td>
             <td>
-              <button class="emoji-btn" on:click={() => editFood(food)}
-                >✏️</button
+              <button
+                class="emoji-btn"
+                on:click={() => editFood(food)}>✏️</button
               >
-              <button class="emoji-btn" on:click={() => deleteFood(food)}
-                >❌</button
+              <button
+                class="emoji-btn"
+                on:click={() => deleteFood(food)}>❌</button
               >
             </td>
           </tr>

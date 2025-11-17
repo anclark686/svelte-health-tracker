@@ -29,6 +29,6 @@ export function load({ cookies }) {
 
   // getDarkMode()
   return {
-    something: "hello",
+    something: 'hello',
   };
 }

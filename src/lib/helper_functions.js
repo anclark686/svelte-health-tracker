@@ -1,9 +1,9 @@
-import moment from "moment-timezone";
+import moment from 'moment-timezone';
 
 export const formatDate = (selectedDate) => {
   const date = new Date(selectedDate);
 
-  return moment(date).format("dddd, MMMM Do YYYY");
+  return moment(date).format('dddd, MMMM Do YYYY');
 };
 
 export const convertWeightToKg = (weight) => {
@@ -12,7 +12,7 @@ export const convertWeightToKg = (weight) => {
 };
 
 export const convertHeightToCm = (height) => {
-  const [feet, inches] = height.replace('"', "").split("'");
+  const [feet, inches] = height.replace('"', '').split("'");
   height = parseFloat(feet) * 12 + parseFloat(inches);
   console.log(feet, inches, height);
   return (height * 2.54).toFixed(2).toString();
@@ -42,9 +42,9 @@ export const getBasicData = (e) => {
 export const capitalize = (str) => {
   return str
     .toLowerCase()
-    .split(" ")
+    .split(' ')
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-    .join(" ");
+    .join(' ');
 };
 
 export const getScoreDifferenceAndLeft = (weightData) => {
@@ -54,16 +54,16 @@ export const getScoreDifferenceAndLeft = (weightData) => {
   const goal = weightData.goalWeight;
   const initial = weightData.initialWeight;
 
-  let score = "";
-  let difference = "";
-  let left = "";
+  let score = '';
+  let difference = '';
+  let left = '';
 
-  if (weightGoal === "Maintain Weight") {
+  if (weightGoal === 'Maintain Weight') {
     if (initial === current && current === goal) {
       // they've maintained weight and hit their goal
-      score = "100%";
-      difference = "0 lbs";
-      left = "0 lbs";
+      score = '100%';
+      difference = '0 lbs';
+      left = '0 lbs';
     } else if (current > initial) {
       // they've gained weight
       score = `${Math.round((goal / current) * 100)}%`;
@@ -75,17 +75,17 @@ export const getScoreDifferenceAndLeft = (weightData) => {
       difference = `-${initial - current} lbs`;
       left = `${goal - initial} lbs`;
     }
-  } else if (weightGoal.includes("Loss")) {
+  } else if (weightGoal.includes('Loss')) {
     if (current === initial) {
       // they've maintained weight
       score = `${Math.round((goal / current) * 100)}%`;
-      difference = "0 lbs";
+      difference = '0 lbs';
       left = `${initial - goal} lbs`;
     } else if (goal === current || goal > current) {
       // they've hit their goal
-      score = "100%";
+      score = '100%';
       difference = `-${initial - goal} lbs`;
-      left = "0 lbs";
+      left = '0 lbs';
     } else if (current > initial) {
       // they've gained weight when they should have lost
       score = `${Math.round((goal / current) * 100)}%`;
@@ -101,13 +101,13 @@ export const getScoreDifferenceAndLeft = (weightData) => {
     if (current === initial) {
       // they've maintained weight
       score = `${Math.round((current / goal) * 100)}%`;
-      difference = "0 lbs";
+      difference = '0 lbs';
       left = `${goal - initial} lbs`;
     } else if (goal === current || goal > current) {
       // they've hit their goal
-      score = "100%";
+      score = '100%';
       difference = `+${goal - initial} lbs`;
-      left = "0 lbs";
+      left = '0 lbs';
     } else if (current > initial) {
       // they've gained weight when they should've
       score = `${Math.round((current / goal) * 100)}%`;
@@ -122,4 +122,24 @@ export const getScoreDifferenceAndLeft = (weightData) => {
   }
 
   return { score, difference, left };
+};
+
+// Food helper functions
+export const addFoodToList = (food, foodData) => {
+  console.log(food);
+  const newFoodData = foodData.filter((item) => item.name !== food.name);
+  return [...newFoodData, food];
+};
+
+// Exercise helper functions
+export const getTimeSpent = (totalTime) => {
+  const hours = Math.floor(totalTime / 60);
+  const minutes = totalTime % 60;
+  if (hours > 0) {
+    return `${hours} hr ${minutes} min`;
+  }
+  if (minutes > 0) {
+    return `${minutes} min`;
+  }
+  return '0 min';
 };

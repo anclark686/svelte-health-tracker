@@ -1,8 +1,8 @@
 <script>
-  import { onMount } from "svelte";
-  import Navbar from "../components/Navbar.svelte";
-  import LoadingSpinner from "../components/LoadingSpinner.svelte";
-  import PageHeader from "../components/PageHeader.svelte";
+  import { onMount } from 'svelte';
+  import Navbar from '../components/Navbar.svelte';
+  import LoadingSpinner from '../components/LoadingSpinner.svelte';
+  import PageHeader from '../components/PageHeader.svelte';
 
   export let data;
 
@@ -13,26 +13,23 @@
   let cookies;
 
   const setDarkModeCookie = (darkOrLight) => {
-    cookies = document.cookie.split(";");
+    cookies = document.cookie.split(';');
     cookies = cookies.filter((cookie) => {
-      !cookie.includes("darkmode");
+      !cookie.includes('darkmode');
     });
     cookies.push(`darkmode=${darkOrLight}`);
 
-    document.cookie = cookies.join("; ");
+    document.cookie = cookies.join('; ');
   };
 
   onMount(() => {
     if (!data.darkmodeInCookie) {
-      if (
-        window.matchMedia &&
-        window.matchMedia("(prefers-color-scheme: dark)").matches
-      ) {
+      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
         darkmode = true;
-        setDarkModeCookie("dark");
+        setDarkModeCookie('dark');
       } else {
         darkmode = false;
-        setDarkModeCookie("light");
+        setDarkModeCookie('light');
       }
     }
 
@@ -40,7 +37,10 @@
   });
 </script>
 
-<div class={darkmode ? "main app-dark" : "main app-light"} id="app">
+<div
+  class={darkmode ? 'main app-dark' : 'main app-light'}
+  id="app"
+>
   <Navbar />
 
   {#if !loading}
@@ -49,7 +49,11 @@
     </div>
   {:else}
     <div class="content">
-      <PageHeader title="Great things to come!" dashboard={false} other={{}} />
+      <PageHeader
+        title="Great things to come!"
+        dashboard={false}
+        other={{}}
+      />
       <LoadingSpinner pageOrSection="page" />
     </div>
   {/if}
@@ -126,7 +130,7 @@
     margin: 0;
     padding: 0;
     font-size: 16px;
-    font-family: "Josefin Sans", sans-serif;
+    font-family: 'Josefin Sans', sans-serif;
     color: var(--text-color);
   }
 
@@ -152,7 +156,7 @@
     color: var(--text-color);
   }
 
-  :global(input[type="checkbox"]) {
+  :global(input[type='checkbox']) {
     accent-color: var(--checkbox-color);
   }
 
@@ -197,7 +201,7 @@
     flex-direction: column;
     justify-content: center;
     margin: 2rem auto;
-    width: 60%;
+    width: 75%;
   }
 
   :global(.content-header) {
@@ -223,7 +227,7 @@
     margin: 1rem;
     cursor: pointer;
     font-size: 1.5rem;
-    font-family: "Josefin Sans", sans-serif;
+    font-family: 'Josefin Sans', sans-serif;
     box-shadow: 0 0 10px var(--box-shadow);
     width: 200px;
   }
@@ -237,7 +241,7 @@
     margin: 1rem;
     cursor: pointer;
     font-size: 1rem;
-    font-family: "Josefin Sans", sans-serif;
+    font-family: 'Josefin Sans', sans-serif;
     box-shadow: 0 0 10px var(--box-shadow);
     width: 125px;
   }
@@ -282,6 +286,32 @@
     width: 5rem;
   }
 
+  :global(.stats-info) {
+    margin: 1rem auto;
+    width: 50%;
+  }
+
+  :global(.info-breakdown p) {
+    margin: 0.5rem;
+    font-size: 1.2rem;
+    color: var(--text-color);
+  }
+
+  :global(.info-line) {
+    display: flex;
+    justify-content: space-between;
+    margin: 0;
+  }
+
+  :global(.info-line .left) {
+    font-weight: bold;
+    text-align: left;
+  }
+
+  :global(.info-line .right) {
+    text-align: right;
+  }
+
   @media (max-width: 800px) {
     :global(.content-box) {
       width: 80%;
@@ -316,6 +346,10 @@
 
     :global(.form-input) {
       width: 80%;
+    }
+
+    :global(.info-line) {
+      margin: 0 1rem;
     }
   }
 </style>

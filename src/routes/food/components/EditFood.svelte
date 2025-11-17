@@ -1,13 +1,13 @@
 <script>
-  import { capitalize, getBasicData } from "$lib/helper_functions";
+  import { capitalize, getBasicData } from '$lib/helper_functions';
   import {
     addOrEditFoodInFoods,
     addOrEditFoodInDates,
     deleteFoodFromDates,
     deleteFoodFromFoods,
-  } from "$lib/firebase_functions";
-  import { auth } from "../../../firebase";
-  import Modal from "../../../components/Modal.svelte";
+  } from '$lib/firebase_functions';
+  import { auth } from '../../../firebase';
+  import Modal from '../../../components/Modal.svelte';
 
   export let showEditModal;
   export let previousFood;
@@ -17,14 +17,14 @@
 
   const QUANTITIES = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
-  let title = "Food";
-  const foodImg = "../../../../src/assets/food.svg";
+  let title = 'Food';
+  const foodImg = '../../../../src/assets/food.svg';
 
   const buttonConfig = {
-    primaryText: "Submit",
-    secondaryText: "Cancel",
-    onPrimaryClick: "submit",
-    onSecondaryClick: "close",
+    primaryText: 'Submit',
+    secondaryText: 'Cancel',
+    onPrimaryClick: 'submit',
+    onSecondaryClick: 'close',
   };
 
   const editFood = async (e) => {
@@ -34,20 +34,11 @@
     console.log(data);
 
     if (data.name !== previousFood?.name) {
-      await deleteFoodFromDates(
-        uid,
-        previousFood,
-        date.format("MM-DD-YYYY")
-      ).then(async () => {
+      await deleteFoodFromDates(uid, previousFood, date.format('MM-DD-YYYY')).then(async () => {
         await deleteFoodFromFoods(uid, previousFood).then(async () => {
           await addOrEditFoodInFoods(data, uid, foodType).then(async () => {
-            await addOrEditFoodInDates(
-              data,
-              uid,
-              foodType,
-              date.format("MM-DD-YYYY")
-            ).then(() => {
-              console.log("done");
+            await addOrEditFoodInDates(data, uid, foodType, date.format('MM-DD-YYYY')).then(() => {
+              console.log('done');
               hideForm(previousFood, data);
             });
           });
@@ -55,13 +46,8 @@
       });
     } else {
       await addOrEditFoodInFoods(data, uid, foodType).then(async () => {
-        await addOrEditFoodInDates(
-          data,
-          uid,
-          foodType,
-          date.format("MM-DD-YYYY")
-        ).then(() => {
-          console.log("done");
+        await addOrEditFoodInDates(data, uid, foodType, date.format('MM-DD-YYYY')).then(() => {
+          console.log('done');
           hideForm(previousFood, data);
         });
       });
@@ -77,15 +63,28 @@
     class="add-food-form"
     on:submit|preventDefault={editFood}
   >
-    <Modal bind:showModal={showEditModal} {buttonConfig}>
-      <div class="header" slot="header">
-        <img src={foodImg} alt="food" class="medium-image" />
+    <Modal
+      bind:showModal={showEditModal}
+      {buttonConfig}
+    >
+      <div
+        class="header"
+        slot="header"
+      >
+        <img
+          src={foodImg}
+          alt="food"
+          class="medium-image"
+        />
         <h2>
           Edit {title}
         </h2>
       </div>
       <div class="form-content">
-        <label for="name" class="form-label">Name</label>
+        <label
+          for="name"
+          class="form-label">Name</label
+        >
         <input
           type="text"
           id="name"
@@ -94,12 +93,22 @@
           value={previousFood?.name}
         />
 
-        <label for="quantity" class="form-label">Quantity</label>
-        <select name="quantity" id="quantity" class="form-input">
+        <label
+          for="quantity"
+          class="form-label">Quantity</label
+        >
+        <select
+          name="quantity"
+          id="quantity"
+          class="form-input"
+        >
           <option value="">Select One</option>
           {#each QUANTITIES as quantity}
             {#if quantity == previousFood?.quantity}
-              <option value={quantity} selected>{quantity}</option>
+              <option
+                value={quantity}
+                selected>{quantity}</option
+              >
             {:else}
               <option value={quantity}>{quantity}</option>
             {/if}
@@ -108,7 +117,10 @@
 
         <div class="sm-input-row">
           <div class="sm-input-col">
-            <label for="calories" class="form-label">Calories</label>
+            <label
+              for="calories"
+              class="form-label">Calories</label
+            >
             <input
               type="number"
               id="calories"
@@ -119,7 +131,10 @@
           </div>
 
           <div class="sm-input-col">
-            <label for="carbs" class="form-label">Carbs</label>
+            <label
+              for="carbs"
+              class="form-label">Carbs</label
+            >
             <input
               type="number"
               id="carbs"
@@ -132,7 +147,10 @@
 
         <div class="sm-input-row">
           <div class="sm-input-col">
-            <label for="fat" class="form-label">Fat</label>
+            <label
+              for="fat"
+              class="form-label">Fat</label
+            >
             <input
               type="number"
               id="fat"
@@ -143,7 +161,10 @@
           </div>
 
           <div class="sm-input-col">
-            <label for="protein" class="form-label">Protein</label>
+            <label
+              for="protein"
+              class="form-label">Protein</label
+            >
             <input
               type="number"
               id="protein"
@@ -216,7 +237,7 @@
     color: var(--text-color);
     cursor: pointer;
     text-align: center;
-    font-family: "Josefin Sans", sans-serif;
+    font-family: 'Josefin Sans', sans-serif;
   }
 
   .add-existing-btn p {

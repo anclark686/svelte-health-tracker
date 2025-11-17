@@ -1,10 +1,10 @@
 <script>
-  import LoadingSpinner from "../../../components/LoadingSpinner.svelte";
+  import LoadingSpinner from '../../../components/LoadingSpinner.svelte';
 
   export let statData;
   export let statsLoading;
 
-  const todo = "***TODO***";
+  const todo = '***TODO***';
 </script>
 
 <div class="weight-stats-container content-box">

@@ -1,16 +1,16 @@
 <script>
-  import moment from "moment-timezone";
-  import { onAuthStateChanged } from "firebase/auth";
+  import moment from 'moment-timezone';
+  import { onAuthStateChanged } from 'firebase/auth';
 
-  import { auth } from "../../../firebase";
-  import { findMealsInDates } from "$lib/firebase_functions";
-  import PageHeader from "../../../components/PageHeader.svelte";
-  import LoadingSpinner from "../../../components/LoadingSpinner.svelte";
-  import DateSwitcher from "../../../components/DateSwitcher.svelte";
-  import AddFood from "../components/AddFood.svelte";
-  import ItemsTable from "../components/ItemsTable.svelte";
-  import MealStats from "../components/MealStats.svelte";
-  import { capitalize } from "$lib/helper_functions";
+  import { auth } from '../../../firebase';
+  import { findMealsInDates } from '$lib/firebase_functions';
+  import PageHeader from '../../../components/PageHeader.svelte';
+  import LoadingSpinner from '../../../components/LoadingSpinner.svelte';
+  import DateSwitcher from '../../../components/DateSwitcher.svelte';
+  import AddFood from '../components/AddFood.svelte';
+  import ItemsTable from '../components/ItemsTable.svelte';
+  import MealStats from '../components/MealStats.svelte';
+  import { capitalize } from '$lib/helper_functions';
 
   // const mainImage = "/../../src/assets/lunch.svg";
   // const foodType = "lunch";
@@ -33,19 +33,17 @@
 
   const refreshMeals = async () => {
     loading = true;
-    const response = await findMealsInDates(
-      uid,
-      foodType,
-      date.format("MM-DD-YYYY")
-    ).then((data) => {
-      loading = false;
-      foodData = data;
-      console.log("Document Data: ", data);
-    });
+    const response = await findMealsInDates(uid, foodType, date.format('MM-DD-YYYY')).then(
+      (data) => {
+        loading = false;
+        foodData = data;
+        console.log('Document Data: ', data);
+      },
+    );
   };
 
   onAuthStateChanged(auth, async (user) => {
-    console.log(date.format("MM-DD-YYYY"));
+    console.log(date.format('MM-DD-YYYY'));
     if (user) {
       uid = user.uid;
       userLoggedIn = true;
@@ -65,19 +63,31 @@
   <PageHeader
     title={`${capitalize(foodType)} Diary`}
     dashboard={true}
-    other={{ destination: "food", title: "Meal Tracker" }}
+    other={{ destination: 'food', title: 'Meal Tracker' }}
   />
-  <DateSwitcher bind:date onChange={refreshMeals} />
+  <DateSwitcher
+    bind:date
+    onChange={refreshMeals}
+  />
 
   {#if loading}
     <LoadingSpinner pageOrSection="page" />
   {:else}
     <div class="meal-content">
-      <img src={mainImage} alt={foodType} class="page-image" />
+      <img
+        src={mainImage}
+        alt={foodType}
+        class="page-image"
+      />
 
-      <ItemsTable bind:foodData {foodType} {date} />
-      <button class="btn" on:click={() => (showAddModal = true)}
-        >Add Food</button
+      <ItemsTable
+        bind:foodData
+        {foodType}
+        {date}
+      />
+      <button
+        class="btn"
+        on:click={() => (showAddModal = true)}>Add Food</button
       >
       <AddFood
         bind:showAddModal
@@ -86,7 +96,10 @@
         {date}
         {foodData}
       />
-      <MealStats {foodType} data={foodData} />
+      <MealStats
+        {foodType}
+        data={foodData}
+      />
     </div>
   {/if}
 </main>

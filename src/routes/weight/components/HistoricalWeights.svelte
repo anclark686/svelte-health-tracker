@@ -1,13 +1,13 @@
 <script>
-  import { formatDate } from "$lib/helper_functions";
-  import LoadingSpinner from "../../../components/LoadingSpinner.svelte";
+  import { formatDate } from '$lib/helper_functions';
+  import LoadingSpinner from '../../../components/LoadingSpinner.svelte';
 
   export let selectedDate;
   export let showModalWithEdit;
   export let historicalWeightData;
   export let historicalLoading;
 
-  let formattedDate = "";
+  let formattedDate = '';
 
   $: if (selectedDate) {
     formattedDate = formatDate(selectedDate);
@@ -20,7 +20,10 @@
     {#if historicalLoading}
       <LoadingSpinner pageOrSection="section" />
     {:else}
-      <label for="dates" class="form-label">Dates:</label>
+      <label
+        for="dates"
+        class="form-label">Dates:</label
+      >
       {#if Object.keys(historicalWeightData).length !== 0}
         <select
           name="dates"

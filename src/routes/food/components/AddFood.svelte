@@ -1,15 +1,15 @@
 <script>
-  import { onMount } from "svelte";
+  import { onMount } from 'svelte';
 
-  import { capitalize, getBasicData } from "$lib/helper_functions";
+  import { capitalize, getBasicData } from '$lib/helper_functions';
   import {
     addOrEditFoodInFoods,
     addOrEditFoodInDates,
     getAllFoodsInFoods,
     findMealsInDates,
-  } from "$lib/firebase_functions";
-  import { auth, db } from "../../../firebase";
-  import Modal from "../../../components/Modal.svelte";
+  } from '$lib/firebase_functions';
+  import { auth, db } from '../../../firebase';
+  import Modal from '../../../components/Modal.svelte';
 
   export let showAddModal;
   export let hideForm;
@@ -20,7 +20,7 @@
   const QUANTITIES = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
   let searchPage = false;
-  let searchTerm = "";
+  let searchTerm = '';
   let resultList = [];
   let searchPressed = false;
   let existingFoods = {};
@@ -29,19 +29,20 @@
   let showDinner = false;
   let showSnacks = false;
   let selectedFood = null;
+  let formEl;
 
   const title = capitalize(foodType);
-  const foodImg = "../../../../src/assets/food.svg";
+  const foodImg = '../../../../src/assets/food.svg';
 
   const buttonConfig = {
-    primaryText: "Add",
-    secondaryText: "Cancel",
-    onPrimaryClick: "submit",
-    onSecondaryClick: "close",
+    primaryText: 'Add',
+    secondaryText: 'Cancel',
+    onPrimaryClick: 'submit',
+    onSecondaryClick: 'close',
   };
 
   const clearExistingFoods = () => {
-    searchTerm = "";
+    searchTerm = '';
     showBreakfast = false;
     showLunch = false;
     showDinner = false;
@@ -66,7 +67,7 @@
         food = item;
       }
     });
-    console.log("found food: ", food);
+    console.log('found food: ', food);
     console.log();
     return food;
   };
@@ -74,19 +75,17 @@
   const addFoodToBoth = async (e) => {
     const uid = auth.currentUser.uid;
     const data = getBasicData(e);
-    const response = await addOrEditFoodInFoods(data, uid, foodType).then(
-      async () => {
-        const response2 = await addOrEditFoodInDates(
-          data,
-          uid,
-          foodType,
-          date.format("MM-DD-YYYY")
-        ).then(() => {
-          console.log("done");
-          hideForm(data);
-        });
-      }
-    );
+    const response = await addOrEditFoodInFoods(data, uid, foodType).then(async () => {
+      const response2 = await addOrEditFoodInDates(
+        data,
+        uid,
+        foodType,
+        date.format('MM-DD-YYYY'),
+      ).then(() => {
+        console.log('done');
+        hideForm(data);
+      });
+    });
   };
 
   const addExistingFoodToDates = async (food) => {
@@ -95,22 +94,24 @@
     if (foundFood) {
       food.quantity = (parseInt(foundFood.quantity) + 1).toString();
     } else {
-      food.quantity = "1";
+      food.quantity = '1';
     }
     console.log(food.quantity);
 
-    const response2 = await addOrEditFoodInDates(
+    const response = await addOrEditFoodInDates(
       food,
       uid,
       foodType,
-      date.format("MM-DD-YYYY")
+      date.format('MM-DD-YYYY'),
     ).then(() => {
-      console.log("done");
+      console.log('done');
       console.log(food);
       hideForm(food);
       clearExistingFoods();
     });
   };
+
+  console.log('hello', foodData);
 
   const getAllFoods = async (e) => {
     const uid = auth.currentUser.uid;
@@ -129,7 +130,10 @@
   };
 
   const searchInAllFoods = () => {
+    if (!searchTerm) return;
+
     searchPressed = true;
+
     if (searchTerm) {
       const allFoods = [
         ...existingFoods.breakfast,
@@ -152,37 +156,75 @@
     }
   };
 
+  const resetForm = () => {
+    if (formEl) formEl.reset();
+    selectedFood = null;
+    searchTerm = '';
+    resultList = [];
+    searchPressed = false;
+    showBreakfast = showLunch = showDinner = showSnacks = false;
+  };
+
   onMount(async () => {
     getAllFoods();
   });
+
+  $: if (!showAddModal) resetForm();
 </script>
 
 <div class="add-food-container">
   <form
     action="submit"
+    bind:this={formEl}
     class="add-food-form"
     on:submit|preventDefault={addFood}
   >
-    <Modal bind:showModal={showAddModal} {buttonConfig}>
-      <div class="header" slot="header">
-        <img src={foodImg} alt="food" class="medium-image" />
+    <Modal
+      bind:showModal={showAddModal}
+      {buttonConfig}
+    >
+      <div
+        class="header"
+        slot="header"
+      >
+        <img
+          src={foodImg}
+          alt="food"
+          class="medium-image"
+        />
         <h2>
           Add {title}
         </h2>
       </div>
 
       <div class="btn-container">
-        <button class="small-btn" on:click={switchToManual}
-          >{!searchPage ? "Add Previous Food" : "Manual Entry"}</button
+        <button
+          class="small-btn"
+          on:click={switchToManual}>{!searchPage ? 'Add Previous Food' : 'Manual Entry'}</button
         >
       </div>
       {#if !searchPage}
         <div class="form-content">
-          <label for="name" class="form-label">Name</label>
-          <input type="text" id="name" name="name" class="form-input" />
+          <label
+            for="name"
+            class="form-label">Name</label
+          >
+          <input
+            type="text"
+            id="name"
+            name="name"
+            class="form-input"
+          />
 
-          <label for="quantity" class="form-label">Quantity</label>
-          <select name="quantity" id="quantity" class="form-input">
+          <label
+            for="quantity"
+            class="form-label">Quantity</label
+          >
+          <select
+            name="quantity"
+            id="quantity"
+            class="form-input"
+          >
             <option value="">Select One</option>
             {#each QUANTITIES as quantity}
               <option value={quantity}>{quantity}</option>
@@ -191,7 +233,10 @@
 
           <div class="sm-input-row">
             <div class="sm-input-col">
-              <label for="calories" class="form-label">Calories</label>
+              <label
+                for="calories"
+                class="form-label">Calories</label
+              >
               <input
                 type="number"
                 id="calories"
@@ -201,19 +246,38 @@
             </div>
 
             <div class="sm-input-col">
-              <label for="carbs" class="form-label">Carbs</label>
-              <input type="number" id="carbs" name="carbs" class="form-input" />
+              <label
+                for="carbs"
+                class="form-label">Carbs</label
+              >
+              <input
+                type="number"
+                id="carbs"
+                name="carbs"
+                class="form-input"
+              />
             </div>
           </div>
 
           <div class="sm-input-row">
             <div class="sm-input-col">
-              <label for="fat" class="form-label">Fat</label>
-              <input type="number" id="fat" name="fat" class="form-input" />
+              <label
+                for="fat"
+                class="form-label">Fat</label
+              >
+              <input
+                type="number"
+                id="fat"
+                name="fat"
+                class="form-input"
+              />
             </div>
 
             <div class="sm-input-col">
-              <label for="protein" class="form-label">Protein</label>
+              <label
+                for="protein"
+                class="form-label">Protein</label
+              >
               <input
                 type="number"
                 id="protein"
@@ -232,8 +296,9 @@
             class="form-input"
             bind:value={searchTerm}
           />
-          <button class="small-btn" on:click|preventDefault={searchInAllFoods}
-            >Search</button
+          <button
+            class="small-btn"
+            on:click|preventDefault={searchInAllFoods}>Search</button
           >
         </div>
         {#if !searchPressed}
@@ -248,14 +313,14 @@
 
               <div
                 class="foods-container"
-                style={showBreakfast ? "" : "display: none;"}
+                style={showBreakfast ? '' : 'display: none;'}
               >
                 {#if existingFoods.breakfast}
                   {#each existingFoods.breakfast as food}
                     <button
                       class={selectedFood?.name == food.name
-                        ? "add-existing-btn selected-btn"
-                        : "add-existing-btn"}
+                        ? 'add-existing-btn selected-btn'
+                        : 'add-existing-btn'}
                       on:click|preventDefault={() => (selectedFood = food)}
                     >
                       <p>{capitalize(food.name)}</p>
@@ -275,14 +340,14 @@
 
               <div
                 class="foods-container"
-                style={showLunch ? "" : "display: none;"}
+                style={showLunch ? '' : 'display: none;'}
               >
                 {#if existingFoods.lunch}
                   {#each existingFoods.lunch as food}
                     <button
                       class={selectedFood?.name == food.name
-                        ? "add-existing-btn selected-btn"
-                        : "add-existing-btn"}
+                        ? 'add-existing-btn selected-btn'
+                        : 'add-existing-btn'}
                       on:click|preventDefault={() => (selectedFood = food)}
                     >
                       <p>{capitalize(food.name)}</p>
@@ -302,14 +367,14 @@
 
               <div
                 class="foods-container"
-                style={showDinner ? "" : "display: none;"}
+                style={showDinner ? '' : 'display: none;'}
               >
                 {#if existingFoods.dinner}
                   {#each existingFoods.dinner as food}
                     <button
                       class={selectedFood?.name == food.name
-                        ? "add-existing-btn selected-btn"
-                        : "add-existing-btn"}
+                        ? 'add-existing-btn selected-btn'
+                        : 'add-existing-btn'}
                       on:click|preventDefault={() => (selectedFood = food)}
                     >
                       <p>{capitalize(food.name)}</p>
@@ -329,14 +394,14 @@
 
               <div
                 class="foods-container"
-                style={showSnacks ? "" : "display: none;"}
+                style={showSnacks ? '' : 'display: none;'}
               >
                 {#if existingFoods.snacks}
                   {#each existingFoods.snacks as food}
                     <button
                       class={selectedFood?.name == food.name
-                        ? "add-existing-btn selected-btn"
-                        : "add-existing-btn"}
+                        ? 'add-existing-btn selected-btn'
+                        : 'add-existing-btn'}
                       on:click|preventDefault={() => (selectedFood = food)}
                     >
                       <p>{capitalize(food.name)}</p>
@@ -354,8 +419,8 @@
               {#each resultList as food}
                 <button
                   class={selectedFood?.name == food.name
-                    ? "add-existing-btn selected-btn"
-                    : "add-existing-btn"}
+                    ? 'add-existing-btn selected-btn'
+                    : 'add-existing-btn'}
                   on:click|preventDefault={() => (selectedFood = food)}
                 >
                   <p>{capitalize(food.name)}</p>
@@ -428,7 +493,7 @@
     color: var(--text-color);
     cursor: pointer;
     text-align: center;
-    font-family: "Josefin Sans", sans-serif;
+    font-family: 'Josefin Sans', sans-serif;
   }
 
   .add-existing-btn p {

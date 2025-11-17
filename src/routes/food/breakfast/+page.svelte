@@ -1,7 +1,10 @@
 <script>
-  import MealPage from "../components/MealPage.svelte";
+  import MealPage from '../components/MealPage.svelte';
 </script>
 
 <main>
-  <MealPage foodType="breakfast" mainImage="/../../src/assets/breakfast.svg" />
+  <MealPage
+    foodType="breakfast"
+    mainImage="/../../src/assets/breakfast.svg"
+  />
 </main>

@@ -1,21 +1,21 @@
 <script>
-  import { signInWithEmailAndPassword } from "firebase/auth";
-  import { goto } from "$app/navigation";
+  import { signInWithEmailAndPassword } from 'firebase/auth';
+  import { goto } from '$app/navigation';
 
-  import { auth } from "../../../firebase";
-  import PageHeader from "../../../components/PageHeader.svelte";
+  import { auth } from '../../../firebase';
+  import PageHeader from '../../../components/PageHeader.svelte';
 
   const ERROR_MAP = {
-    "auth/email-already-in-use": "Email already in use",
-    "auth/invalid-credential": "Invalid credentials",
-    "auth/weak-password": "Password should be at least 6 characters",
-    "auth/user-not-found": "User not found",
-    "auth/missing-password": "Password cannot be empty",
+    'auth/email-already-in-use': 'Email already in use',
+    'auth/invalid-credential': 'Invalid credentials',
+    'auth/weak-password': 'Password should be at least 6 characters',
+    'auth/user-not-found': 'User not found',
+    'auth/missing-password': 'Password cannot be empty',
   };
 
-  const loginImg = "../src/assets/log_in.svg";
+  const loginImg = '../src/assets/log_in.svg';
 
-  let errorMessage = "";
+  let errorMessage = '';
 
   const login = (e) => {
     const formData = new FormData(e.target);
@@ -28,7 +28,7 @@
     signInWithEmailAndPassword(auth, data.email, data.password)
       .then((userCredential) => {
         const user = userCredential.user;
-        goto("/dashboard");
+        goto('/dashboard');
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -39,16 +39,48 @@
 </script>
 
 <div class="login-page">
-  <PageHeader title="Login" dashboard={false} other={{}} />
-  <img src={loginImg} alt="login" class="page-image" />
+  <PageHeader
+    title="Login"
+    dashboard={false}
+    other={{}}
+  />
+  <img
+    src={loginImg}
+    alt="login"
+    class="page-image"
+  />
 
-  <form action="submit" class="login-form" on:submit|preventDefault={login}>
+  <form
+    action="submit"
+    class="login-form"
+    on:submit|preventDefault={login}
+  >
     <h1>Login</h1>
-    <label for="email" class="form-label">Email</label>
-    <input type="email" id="email" name="email" class="form-input" />
-    <label for="password" class="form-label">Password</label>
-    <input type="password" id="password" name="password" class="form-input" />
-    <input type="submit" value="Login" class="submit-btn" />
+    <label
+      for="email"
+      class="form-label">Email</label
+    >
+    <input
+      type="email"
+      id="email"
+      name="email"
+      class="form-input"
+    />
+    <label
+      for="password"
+      class="form-label">Password</label
+    >
+    <input
+      type="password"
+      id="password"
+      name="password"
+      class="form-input"
+    />
+    <input
+      type="submit"
+      value="Login"
+      class="submit-btn"
+    />
     <p>
       Don't have an account? <a href="/login_register/register">Register</a>
     </p>

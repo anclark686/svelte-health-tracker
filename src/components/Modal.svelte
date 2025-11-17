@@ -2,10 +2,9 @@
   export let showModal;
   export let buttonConfig; // {primaryText, secondaryText, onPrimaryClick, onSecondaryClick}
 
-  let { primaryText, secondaryText, onPrimaryClick, onSecondaryClick } =
-    buttonConfig;
+  let { primaryText, secondaryText, onPrimaryClick, onSecondaryClick } = buttonConfig;
 
-  if (onPrimaryClick === "close") {
+  if (onPrimaryClick === 'close') {
     onPrimaryClick = () => {
       console.log(showModal);
       showModal = false;
@@ -14,7 +13,7 @@
     };
   }
 
-  if (onSecondaryClick === "close") {
+  if (onSecondaryClick === 'close') {
     onSecondaryClick = () => {
       console.log(showModal);
       showModal = false;
@@ -43,15 +42,21 @@
 
     <div class="btn-container">
       {#if secondaryText}
-        <button class="small-btn" on:click|preventDefault={onSecondaryClick}
-          >{secondaryText}</button
+        <button
+          class="small-btn"
+          on:click|preventDefault={onSecondaryClick}>{secondaryText}</button
         >
       {/if}
-      {#if onPrimaryClick === "submit"}
-        <input type="submit" value={primaryText} class="small-btn" />
+      {#if onPrimaryClick === 'submit'}
+        <input
+          type="submit"
+          value={primaryText}
+          class="small-btn"
+        />
       {:else}
-        <button class="small-btn" on:click|preventDefault={onPrimaryClick}
-          >{primaryText}</button
+        <button
+          class="small-btn"
+          on:click|preventDefault={onPrimaryClick}>{primaryText}</button
         >
       {/if}
     </div>

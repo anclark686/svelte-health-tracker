@@ -1,10 +1,10 @@
 <script>
-  import LoadingSpinner from "../../../components/LoadingSpinner.svelte";
+  import LoadingSpinner from '../../../components/LoadingSpinner.svelte';
 
   export let statData;
   export let statsLoading;
 
-  const todo = "***TODO***";
+  const todo = '***TODO***';
 </script>
 
 <div class="water-stats-container content-box">
@@ -21,12 +21,12 @@
 
         <div class="info-line">
           <p class="left">Total Ounces:</p>
-          <p class="right">{statData.waterInOunces} oz</p>
+          <p class="right">{statData.waterInOunces || 0} oz</p>
         </div>
 
         <div class="info-line">
           <p class="left">Total Cups:</p>
-          <p class="right">{statData.waterInCups} cups</p>
+          <p class="right">{statData.waterInCups || 0} cups</p>
         </div>
 
         <div class="info-line">
@@ -44,31 +44,6 @@
 </div>
 
 <style>
-  .stats-info {
-    margin: 1rem;
-  }
-
-  .info-breakdown p {
-    margin: 0.5rem;
-    font-size: 1.2rem;
-    color: var(--text-color);
-  }
-
-  .info-line {
-    display: flex;
-    justify-content: space-between;
-    margin: 0 5rem;
-  }
-
-  .left {
-    font-weight: bold;
-    text-align: left;
-  }
-
-  .right {
-    text-align: right;
-  }
-
   @media (max-width: 800px) {
     .info-breakdown {
       width: 90%;
@@ -77,12 +52,6 @@
 
     .info-line {
       width: 90%;
-      margin: 0 1rem;
-    }
-  }
-
-  @media (max-width: 600px) {
-    .info-line {
       margin: 0 1rem;
     }
   }

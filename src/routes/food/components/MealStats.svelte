@@ -1,5 +1,5 @@
 <script>
-  import { capitalize } from "$lib/helper_functions";
+  import { capitalize } from '$lib/helper_functions';
 
   export let foodType;
   export let data;
@@ -37,10 +37,10 @@
     calories = allCalories;
   };
 
-  const title = foodType !== "snacks" ? capitalize(foodType) : "Snack";
+  const title = foodType !== 'snacks' ? capitalize(foodType) : 'Snack';
 
   $: if (data) {
-    console.log("herrrrreeee");
+    console.log('herrrrreeee');
     console.log(data);
     calculateStats();
   }
@@ -84,34 +84,4 @@
 </div>
 
 <style>
-  .stats-info {
-    margin: 1rem;
-  }
-
-  .info-breakdown p {
-    margin: 0.5rem;
-    font-size: 1.2rem;
-    color: var(--text-color);
-  }
-
-  .info-line {
-    display: flex;
-    justify-content: space-between;
-    margin: 0 5rem;
-  }
-
-  .left {
-    font-weight: bold;
-    text-align: left;
-  }
-
-  .right {
-    text-align: right;
-  }
-
-  @media (max-width: 600px) {
-    .info-line {
-      margin: 0 1rem;
-    }
-  }
 </style>

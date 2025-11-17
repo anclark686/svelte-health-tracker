@@ -1,13 +1,13 @@
 <script>
-  import { onMount } from "svelte";
-  import { onAuthStateChanged } from "firebase/auth";
+  import { onMount } from 'svelte';
+  import { onAuthStateChanged } from 'firebase/auth';
 
-  import { auth } from "../../firebase";
-  import { getDataFromDB } from "$lib/firebase_functions";
-  import LoadingSpinner from "../../components/LoadingSpinner.svelte";
-  import DailyStats from "./components/DailyStats.svelte";
-  import TrackerContainer from "./components/TrackerContainer.svelte";
-  import PageHeader from "../../components/PageHeader.svelte";
+  import { auth } from '../../firebase';
+  import { getDataFromDB } from '$lib/firebase_functions';
+  import LoadingSpinner from '../../components/LoadingSpinner.svelte';
+  import DailyStats from './components/DailyStats.svelte';
+  import TrackerContainer from './components/TrackerContainer.svelte';
+  import PageHeader from '../../components/PageHeader.svelte';
 
   let loading = true;
   let userLoggedIn = false;
@@ -21,7 +21,7 @@
       const response = await getDataFromDB(uid).then((data) => {
         userData = data;
         loading = false;
-        console.log("Document Data: ", data);
+        console.log('Document Data: ', data);
       });
     } else {
       userLoggedIn = false;
@@ -35,7 +35,11 @@
   {#if loading}
     <LoadingSpinner pageOrSection="page" />
   {:else}
-    <PageHeader title="Dashboard" dashboard={false} other={{}} />
+    <PageHeader
+      title="Dashboard"
+      dashboard={false}
+      other={{}}
+    />
     {#if userLoggedIn}
       <div class="header-container">
         <h1 class="header-text">Welcome {userData.firstName}!</h1>

@@ -1,34 +1,30 @@
 <script>
-  import moment from "moment-timezone";
-  import { doc, setDoc } from "firebase/firestore";
-  import { goto } from "$app/navigation";
+  import moment from 'moment-timezone';
+  import { doc, setDoc } from 'firebase/firestore';
+  import { goto } from '$app/navigation';
 
-  import {
-    convertHeightToCm,
-    convertWeightToKg,
-    getBasicData,
-  } from "../../lib/helper_functions";
-  import { auth, db } from "../../firebase";
-  import { logoutUser } from "$lib/firebase_functions";
-  import PageHeader from "../../components/PageHeader.svelte";
-  import Modal from "../../components/Modal.svelte";
-  import BasicInfo from "./components/BasicInfo.svelte";
-  import HealthInfo from "./components/HealthInfo.svelte";
-  import DateSelector from "../../components/DateSelector.svelte";
+  import { convertHeightToCm, convertWeightToKg, getBasicData } from '../../lib/helper_functions';
+  import { auth, db } from '../../firebase';
+  import { logoutUser } from '$lib/firebase_functions';
+  import PageHeader from '../../components/PageHeader.svelte';
+  import Modal from '../../components/Modal.svelte';
+  import BasicInfo from './components/BasicInfo.svelte';
+  import HealthInfo from './components/HealthInfo.svelte';
+  import DateSelector from '../../components/DateSelector.svelte';
 
   const errorMap = {};
   let showModal = true;
 
   const buttonConfig = {
-    primaryText: "Continue",
-    secondaryText: "Logout",
-    onPrimaryClick: "close",
+    primaryText: 'Continue',
+    secondaryText: 'Logout',
+    onPrimaryClick: 'close',
     onSecondaryClick: () => logoutUser(),
   };
 
   const validateData = (data) => {
     Object.entries(data).forEach(([key, value]) => {
-      if (value === "") {
+      if (value === '') {
         errorMap[key] = true;
       }
     });
@@ -42,10 +38,8 @@
   };
 
   const addExtraData = (data) => {
-    data.birthday = moment
-      .tz(data.birthday, "America/New_York")
-      .format("MM/DD/YYYY");
-    data.phoneNum = data.phoneNum.replace(/\D/g, "");
+    data.birthday = moment.tz(data.birthday, 'America/New_York').format('MM/DD/YYYY');
+    data.phoneNum = data.phoneNum.replace(/\D/g, '');
     data.heightInCm = convertHeightToCm(data.height);
     data.currWeightInKg = convertWeightToKg(data.currWeight);
     data.goalWeightInKg = convertWeightToKg(data.goalWeight);
@@ -74,20 +68,27 @@
 
     if (isDataValid) {
       data = addExtraData(data);
-      await setDoc(doc(db, "users", auth.currentUser.uid), data).then(() => {
-        goto("/dashboard");
+      await setDoc(doc(db, 'users', auth.currentUser.uid), data).then(() => {
+        goto('/dashboard');
       });
       console.log(data);
     } else {
-      console.log("data not valid");
+      console.log('data not valid');
     }
   };
 </script>
 
 <div class="intake-page">
-  <PageHeader title="Account Setup" dashboard={false} other={{}} />
+  <PageHeader
+    title="Account Setup"
+    dashboard={false}
+    other={{}}
+  />
 
-  <Modal bind:showModal {buttonConfig}>
+  <Modal
+    bind:showModal
+    {buttonConfig}
+  >
     <h2 slot="header">Welcome to Reyaly Health Tracker!</h2>
 
     <p class="bigger">It looks like it's your first time here!</p>
@@ -103,7 +104,11 @@
     <BasicInfo {errorMap} />
 
     <HealthInfo {errorMap} />
-    <input type="submit" value="Submit" class="submit-btn" />
+    <input
+      type="submit"
+      value="Submit"
+      class="submit-btn"
+    />
   </form>
 </div>
 

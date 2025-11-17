@@ -1,4 +1,4 @@
-import { goto } from "$app/navigation";
+import { goto } from '$app/navigation';
 import {
   doc,
   getDoc,
@@ -10,32 +10,32 @@ import {
   deleteDoc,
   updateDoc,
   increment,
-  orderBy
-} from "firebase/firestore";
+  orderBy,
+} from 'firebase/firestore';
 
-import { auth, db } from "../firebase";
-import { convertWeightToKg, getBasicData } from "../lib/helper_functions";
+import { auth, db } from '../firebase';
+import { convertWeightToKg, getBasicData } from '../lib/helper_functions';
 
 export const logoutUser = () => {
   auth.signOut();
-  goto("/");
+  goto('/');
 };
 
 export const getDataFromDB = async (uid) => {
-  const docRef = doc(db, "users", uid);
+  const docRef = doc(db, 'users', uid);
   const docSnap = await getDoc(docRef);
 
   if (docSnap.exists()) {
     return docSnap.data();
   } else {
-    console.log("No such document!");
+    console.log('No such document!');
     return {};
   }
 };
 
 // gets the doc stuff that isn't in a folder
 export const getDateInfo = async (uid, date) => {
-  const docRef = doc(db, "users", uid, "dates", date);
+  const docRef = doc(db, 'users', uid, 'dates', date);
 
   const docSnap = await getDoc(docRef);
 
@@ -43,13 +43,13 @@ export const getDateInfo = async (uid, date) => {
     return docSnap.data();
   } else {
     // docSnap.data() will be undefined in this case
-    console.log("No such document!");
+    console.log('No such document!');
     return {};
   }
 };
 
 export const getHistoricalData = async (uid) => {
-  const querySnapshot = await getDocs(collection(db, "users", uid, "dates"));
+  const querySnapshot = await getDocs(collection(db, 'users', uid, 'dates'));
 
   const data = {};
 
@@ -68,7 +68,7 @@ export const getAllFoodsInFoods = async (uid) => {
     dinner: [],
     snacks: [],
   };
-  const q = query(collection(db, "users", uid, "foods"));
+  const q = query(collection(db, 'users', uid, 'foods'));
   const querySnapshot = await getDocs(q);
 
   querySnapshot.forEach((doc) => {
@@ -80,7 +80,7 @@ export const getAllFoodsInFoods = async (uid) => {
 
 export const findMealsInDates = async (uid, meal, date) => {
   const foodArray = [];
-  const q = query(collection(db, "users", uid, "dates", date, meal));
+  const q = query(collection(db, 'users', uid, 'dates', date, meal));
 
   const querySnapshot = await getDocs(q);
   querySnapshot.forEach((doc) => {
@@ -93,7 +93,7 @@ export const findMealsInDates = async (uid, meal, date) => {
 export const addOrEditFoodInFoods = async (data, uid, meal) => {
   const { name, calories, protein, fat, carbs, quantity } = data;
 
-  return await setDoc(doc(db, "users", uid, "foods", name.toLowerCase()), {
+  return await setDoc(doc(db, 'users', uid, 'foods', name.toLowerCase()), {
     name: name.toLowerCase(),
     calories,
     protein,
@@ -108,51 +108,32 @@ export const addOrEditFoodInFoods = async (data, uid, meal) => {
 export const addOrEditFoodInDates = async (data, uid, meal, date) => {
   const { name, calories, protein, fat, carbs, quantity } = data;
 
-  return await setDoc(
-    doc(db, "users", uid, "dates", date, meal, name.toLowerCase()),
-    {
-      name: name.toLowerCase(),
-      calories,
-      protein,
-      fat,
-      carbs,
-      quantity,
-      meal: meal,
-      uid: uid,
-    },
-  );
+  return await setDoc(doc(db, 'users', uid, 'dates', date, meal, name.toLowerCase()), {
+    name: name.toLowerCase(),
+    calories,
+    protein,
+    fat,
+    carbs,
+    quantity,
+    meal: meal,
+    uid: uid,
+  });
 };
 
 export const deleteFoodFromDates = async (uid, food, date) => {
-  const docRef = doc(
-    db,
-    "users",
-    uid,
-    "dates",
-    date,
-    food.meal,
-    food.name.toLowerCase(),
-  );
+  const docRef = doc(db, 'users', uid, 'dates', date, food.meal, food.name.toLowerCase());
 
   await deleteDoc(docRef);
 };
 
 export const deleteFoodFromFoods = async (uid, food) => {
-  const docRef = doc(db, "users", uid, "foods", food.name.toLowerCase());
+  const docRef = doc(db, 'users', uid, 'foods', food.name.toLowerCase());
 
   await deleteDoc(docRef);
 };
 
 export const changeQuantityInDates = async (uid, food, date, quantity) => {
-  const docRef = doc(
-    db,
-    "users",
-    uid,
-    "dates",
-    date,
-    food.meal,
-    food.name.toLowerCase(),
-  );
+  const docRef = doc(db, 'users', uid, 'dates', date, food.meal, food.name.toLowerCase());
 
   await setDoc(docRef, {
     ...food,
@@ -201,7 +182,7 @@ export const getPreviousWeightData = async (uid) => {
 export const addWeightToDates = async (uid, weight, date) => {
   const weightInKg = convertWeightToKg(weight);
 
-  const docRef = doc(db, "users", uid, "dates", date);
+  const docRef = doc(db, 'users', uid, 'dates', date);
   await getDateInfo(uid, date).then(async (data) => {
     if (Object.keys(data).length === 0) {
       await setDoc(docRef, {
@@ -230,7 +211,7 @@ export const addWeightToMainDetails = async (uid, weight) => {
       highestWeightInKg,
     } = data;
 
-    const docRef = doc(db, "users", uid);
+    const docRef = doc(db, 'users', uid);
 
     if (weight < lowestWeight) {
       lowestWeight = weight;
@@ -268,7 +249,7 @@ export const getHistoricalWaterData = async (uid) => {
 };
 
 export const addWaterToDates = async (uid, waterData, date) => {
-  const docRef = doc(db, "users", uid, "dates", date);
+  const docRef = doc(db, 'users', uid, 'dates', date);
 
   const { ounces, cups } = waterData;
 
@@ -305,115 +286,205 @@ export const getWaterByDate = async (uid, date) => {
 
 // medication stuff
 export const getMedsFromDB = async (uid) => {
-  const data = []
+  const data = [];
 
-  const q = query(collection(db, "users", uid, "meds"), orderBy("name"));
+  const q = query(collection(db, 'users', uid, 'meds'), orderBy('name'));
 
   const medSnapshot = await getDocs(q);
 
   medSnapshot.forEach((doc) => {
     // doc.data() is never undefined for query doc snapshots
-    console.log(doc.id, " => ", doc.data());
+    console.log(doc.id, ' => ', doc.data());
     data.push({
       ...doc.data(),
-      id: doc.id
-    })
+      id: doc.id,
+    });
   });
 
-  return data
-}
+  return data;
+};
 
 export const addMedToUserDB = async (uid, med) => {
-  const medRef = doc(db, "users", uid, "meds", med.name);
+  const medRef = doc(db, 'users', uid, 'meds', med.name);
   // need to make sure it doesn't exist already
   await getMedsFromDB(uid).then(async (data) => {
     if (!Object.keys(data).includes(med.name)) {
       await setDoc(medRef, med);
     } else {
-      console.log("med already exists")
+      console.log('med already exists');
     }
-  })
-}
+  });
+};
 
 export const addMedToDates = async (uid, med, date, time) => {
-  await setDoc(doc(db, "users", uid, "dates", date, `${time}Meds`, med.name), med)
-}
+  await setDoc(doc(db, 'users', uid, 'dates', date, `${time}Meds`, med.name), med);
+};
 
 export const addMedsToDates = async (uid, meds, date, time) => {
-  const medData = []
-  console.log("infirebase", meds)
+  const medData = [];
+  console.log('infirebase', meds);
 
   Object.keys(meds).forEach(async (medName) => {
-    const medInfo = { ...meds[medName], id: meds[medName].name, taken: false, time: time }
+    const medInfo = {
+      ...meds[medName],
+      id: meds[medName].name,
+      taken: false,
+      time: time,
+    };
 
-    medData.push(medInfo)
+    medData.push(medInfo);
 
-    addMedToDates(uid, medInfo, date, time)
-  })
+    addMedToDates(uid, medInfo, date, time);
+  });
 
-  return medData
-}
+  return medData;
+};
 
 export const getMedDateInfo = async (uid, date, meds, time) => {
-  let medData = []
+  let medData = [];
 
-  await getDocs(collection(db, "users", uid, "dates", date, `${time}Meds`)).then(async (data) => {
+  await getDocs(collection(db, 'users', uid, 'dates', date, `${time}Meds`)).then(async (data) => {
     if (data.empty) {
-      medData = await addMedsToDates(uid, meds, date, time)
+      medData = await addMedsToDates(uid, meds, date, time);
     } else {
       data.forEach((doc) => {
-        medData.push({ ...doc.data(), id: doc.id })
+        medData.push({ ...doc.data(), id: doc.id });
       });
     }
-  })
+  });
 
-  return medData
+  return medData;
 };
 
 export const toggleMedInDb = async (uid, med, date, time) => {
-  const medRef = doc(db, "users", uid, "dates", date, `${time}Meds`, med.name);
+  const medRef = doc(db, 'users', uid, 'dates', date, `${time}Meds`, med.name);
 
-  await updateDoc(medRef, { taken: med.taken })
-}
+  await updateDoc(medRef, { taken: med.taken });
+};
 
 export const deleteMedInDb = async (uid, med) => {
-  const medRef = doc(db, "users", uid, "meds", med.name);
-  await deleteDoc(medRef)
-}
-
+  const medRef = doc(db, 'users', uid, 'meds', med.name);
+  await deleteDoc(medRef);
+};
 
 export const editMedInDb = async (uid, med, prevMed, date) => {
   if (med.name !== prevMed.name) {
-    await deleteMedInDb(uid, prevMed)
+    await deleteMedInDb(uid, prevMed);
 
-    await addMedToUserDB(uid, med)
+    await addMedToUserDB(uid, med);
 
     med.times.forEach(async (time) => {
-      console.log("you here?", time)
-      await addMedToDates(uid, med, date, time)
-    })
-    return
+      console.log('you here?', time);
+      await addMedToDates(uid, med, date, time);
+    });
+    return;
   }
 
-  const medForMeds = { ...med }
+  const medForMeds = { ...med };
 
-  delete medForMeds.taken
+  delete medForMeds.taken;
 
-  const medRef = doc(db, "users", uid, "meds", med.name);
+  const medRef = doc(db, 'users', uid, 'meds', med.name);
 
   await updateDoc(medRef, medForMeds).then(async () => {
-    const medData = []
+    const medData = [];
 
-    const medForDates = { ...med }
+    const medForDates = { ...med };
 
     medForDates.times.forEach((time) => {
-      medData.push({ ...medForDates, time: time })
-    })
+      medData.push({ ...medForDates, time: time });
+    });
 
     medData.forEach(async (m) => {
-      const medDateRef = doc(db, "users", uid, "dates", date, `${m.time}Meds`, med.name);
+      const medDateRef = doc(db, 'users', uid, 'dates', date, `${m.time}Meds`, med.name);
 
-      await updateDoc(medDateRef, m)
-    })
-  })
-}
+      await updateDoc(medDateRef, m);
+    });
+  });
+};
+
+// exercise stuff
+export const getAllExercisesInExercises = async (uid) => {
+  const exerciseObj = {
+    cardio: [],
+    strength: [],
+  };
+  const q = query(collection(db, 'users', uid, 'exercises'));
+  const querySnapshot = await getDocs(q);
+
+  querySnapshot.forEach((doc) => {
+    console.log(doc.data());
+    exerciseObj[doc.data().workoutType].push(doc.data());
+  });
+
+  return exerciseObj;
+};
+
+export const getExerciseDateInfoByType = async (uid, type, date) => {
+  const exerciseArray = [];
+  console.log('Getting exercise data for type:', type);
+  const q = query(collection(db, 'users', uid, 'dates', date, type));
+
+  const querySnapshot = await getDocs(q);
+  querySnapshot.forEach((doc) => {
+    exerciseArray.push(doc.data());
+  });
+  console.log('Exercise Array: ', exerciseArray);
+  return exerciseArray;
+};
+
+export const addOrEditExerciseInExercises = async (data, uid, exerciseType) => {
+  const {
+    name = '',
+    caloriesBurned = '',
+    lengthTime = '',
+    intensity = '',
+    weight = '',
+    sets = '',
+    reps = '',
+    timeOfDay = '',
+    area = '',
+  } = data;
+
+  return await setDoc(doc(db, 'users', uid, 'exercises', name.toLowerCase()), {
+    name: name.toLowerCase(),
+    caloriesBurned,
+    lengthTime,
+    intensity: intensity.toLowerCase(),
+    weight,
+    sets,
+    reps,
+    timeOfDay: timeOfDay.toLowerCase(),
+    area: area.toLowerCase(),
+    workoutType: exerciseType,
+    uid: uid,
+  });
+};
+
+export const addOrEditExerciseInDates = async (data, uid, exerciseType, date) => {
+  const {
+    name = '',
+    caloriesBurned = '',
+    lengthTime = '',
+    intensity = '',
+    weight = '',
+    sets = '',
+    reps = '',
+    timeOfDay = '',
+    area = '',
+  } = data;
+
+  return await setDoc(doc(db, 'users', uid, 'dates', date, exerciseType, name.toLowerCase()), {
+    name: name.toLowerCase(),
+    caloriesBurned,
+    lengthTime,
+    intensity: intensity.toLowerCase(),
+    weight,
+    sets,
+    reps,
+    timeOfDay: timeOfDay.toLowerCase(),
+    area: area.toLowerCase(),
+    workoutType: exerciseType,
+    uid: uid,
+  });
+};

@@ -1,7 +1,7 @@
 <script>
-  import moment from "moment-timezone";
+  import moment from 'moment-timezone';
 
-  const today = moment().tz("America/New_York").format("MM/DD/YYYY");
+  const today = moment().tz('America/New_York').format('MM/DD/YYYY');
 </script>
 
 <div class="stats-container content-box">

@@ -1,7 +1,7 @@
 <script>
-  const todo = "***TODO***";
+  const todo = '***TODO***';
 
-  const DIET = ["Balanced", "Low Carb", "Low Fat", "High Protein"];
+  const DIET = ['Balanced', 'Low Carb', 'Low Fat', 'High Protein'];
 </script>
 
 <div class="calorie-info-container content-box">
@@ -9,8 +9,15 @@
   <div class="calorie-info">
     <div class="info-breakdown">
       <div class="select-container">
-        <label for="diet" class="form-label">Diet Preference</label>
-        <select name="diet" id="diet" class="form-input">
+        <label
+          for="diet"
+          class="form-label">Diet Preference</label
+        >
+        <select
+          name="diet"
+          id="diet"
+          class="form-input"
+        >
           <option value="">Select One</option>
           {#each DIET as activity}
             <option value={activity}>{activity}</option>

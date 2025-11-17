@@ -1,6 +1,6 @@
 <script>
-  import { capitalize } from "$lib/helper_functions";
-  import Modal from "../../../components/Modal.svelte";
+  import { capitalize } from '$lib/helper_functions';
+  import Modal from '../../../components/Modal.svelte';
 
   export let showModal;
   export let addNewMed;
@@ -8,7 +8,7 @@
   export let edit;
   export let selectedMed;
 
-  const medImg = "../../../../src/assets/meds.svg";
+  const medImg = '../../../../src/assets/meds.svg';
 
   let times = [];
   let showTimes = false;
@@ -18,10 +18,10 @@
   let nightInTimes = false;
 
   const buttonConfig = {
-    primaryText: !edit ? "Add" : "Edit",
-    secondaryText: "Cancel",
-    onPrimaryClick: "submit",
-    onSecondaryClick: "close",
+    primaryText: !edit ? 'Add' : 'Edit',
+    secondaryText: 'Cancel',
+    onPrimaryClick: 'submit',
+    onSecondaryClick: 'close',
   };
 
   const addTime = (e, time) => {
@@ -37,10 +37,10 @@
       }
     }
 
-    morningInTimes = times.includes("morning");
-    afternoonInTimes = times.includes("afternoon");
-    eveningInTimes = times.includes("evening");
-    nightInTimes = times.includes("night");
+    morningInTimes = times.includes('morning');
+    afternoonInTimes = times.includes('afternoon');
+    eveningInTimes = times.includes('evening');
+    nightInTimes = times.includes('night');
   };
 
   const submitAndClearForm = (e) => {
@@ -62,10 +62,10 @@
   $: if (edit && selectedMed) {
     times = times.length > 0 ? times : selectedMed.times;
 
-    morningInTimes = times.includes("morning");
-    afternoonInTimes = times.includes("afternoon");
-    eveningInTimes = times.includes("evening");
-    nightInTimes = times.includes("night");
+    morningInTimes = times.includes('morning');
+    afternoonInTimes = times.includes('afternoon');
+    eveningInTimes = times.includes('evening');
+    nightInTimes = times.includes('night');
   }
 </script>
 
@@ -75,9 +75,19 @@
     class="add-med-form"
     on:submit|preventDefault={submitAndClearForm}
   >
-    <Modal bind:showModal {buttonConfig}>
-      <div class="header" slot="header">
-        <img src={medImg} alt="food" class="medium-image" />
+    <Modal
+      bind:showModal
+      {buttonConfig}
+    >
+      <div
+        class="header"
+        slot="header"
+      >
+        <img
+          src={medImg}
+          alt="food"
+          class="medium-image"
+        />
         {#if edit && selectedMed}
           <h2>
             Edit {capitalize(selectedMed.name)}
@@ -88,7 +98,10 @@
       </div>
       <div class="form-content">
         {#if edit && selectedMed}
-          <label for="name" class="form-label">Name</label>
+          <label
+            for="name"
+            class="form-label">Name</label
+          >
           <input
             type="text"
             id="name"
@@ -97,7 +110,10 @@
             value={selectedMed?.name}
           />
 
-          <label for="dose" class="form-label">Dose</label>
+          <label
+            for="dose"
+            class="form-label">Dose</label
+          >
           <input
             type="text"
             id="dose"
@@ -106,18 +122,21 @@
             value={selectedMed?.dose}
           />
 
-          <label for="time" class="form-label">Times</label>
+          <label
+            for="time"
+            class="form-label">Times</label
+          >
           <div class="times">
             <button
               class="form-input times-btn"
               type="button"
               on:click={() => (showTimes = !showTimes)}
             >
-              {selectedMed?.times.map((t) => capitalize(t)).join(", ")}
+              {selectedMed?.times.map((t) => capitalize(t)).join(', ')}
             </button>
             <div
               class="time-options"
-              style={showTimes ? "display:flex" : "display:none"}
+              style={showTimes ? 'display:flex' : 'display:none'}
             >
               <ul class="times-menu">
                 <li>
@@ -125,7 +144,7 @@
                     <input
                       type="checkbox"
                       value="morning"
-                      on:change={(e) => addTime(e, "morning")}
+                      on:change={(e) => addTime(e, 'morning')}
                       bind:checked={morningInTimes}
                     />
                     Morning
@@ -136,7 +155,7 @@
                     <input
                       type="checkbox"
                       value="afternoon"
-                      on:change={(e) => addTime(e, "afternoon")}
+                      on:change={(e) => addTime(e, 'afternoon')}
                       bind:checked={afternoonInTimes}
                     />
                     Afternoon
@@ -149,7 +168,7 @@
                     <input
                       type="checkbox"
                       value="evening"
-                      on:change={(e) => addTime(e, "evening")}
+                      on:change={(e) => addTime(e, 'evening')}
                       bind:checked={eveningInTimes}
                     />
                     Evening
@@ -160,7 +179,7 @@
                     <input
                       type="checkbox"
                       value="night"
-                      on:change={(e) => addTime(e, "night")}
+                      on:change={(e) => addTime(e, 'night')}
                       bind:checked={nightInTimes}
                     />
                     Night
@@ -170,7 +189,10 @@
             </div>
           </div>
 
-          <label for="prescriber" class="form-label">Prescriber</label>
+          <label
+            for="prescriber"
+            class="form-label">Prescriber</label
+          >
           <input
             type="text"
             id="prescriber"
@@ -179,7 +201,10 @@
             value={selectedMed?.prescriber}
           />
 
-          <label for="takenFor" class="form-label">Taken For</label>
+          <label
+            for="takenFor"
+            class="form-label">Taken For</label
+          >
           <input
             type="text"
             id="takenFor"
@@ -188,7 +213,10 @@
             value={selectedMed?.takenFor}
           />
 
-          <label for="lastFilled" class="form-label">Last Filled</label>
+          <label
+            for="lastFilled"
+            class="form-label">Last Filled</label
+          >
           <input
             type="date"
             id="lastFilled"
@@ -197,26 +225,43 @@
             value={selectedMed?.lastFilled}
           />
         {:else}
-          <label for="name" class="form-label">Name</label>
-          <input type="text" id="name" name="name" class="form-input" />
+          <label
+            for="name"
+            class="form-label">Name</label
+          >
+          <input
+            type="text"
+            id="name"
+            name="name"
+            class="form-input"
+          />
 
-          <label for="dose" class="form-label">Dose</label>
-          <input type="text" id="dose" name="dose" class="form-input" />
+          <label
+            for="dose"
+            class="form-label">Dose</label
+          >
+          <input
+            type="text"
+            id="dose"
+            name="dose"
+            class="form-input"
+          />
 
-          <label for="time" class="form-label">Times</label>
+          <label
+            for="time"
+            class="form-label">Times</label
+          >
           <div class="times">
             <button
               class="form-input times-btn"
               type="button"
               on:click={() => (showTimes = !showTimes)}
             >
-              {times.length === 0
-                ? "Select Times"
-                : times.map((t) => capitalize(t)).join(", ")}
+              {times.length === 0 ? 'Select Times' : times.map((t) => capitalize(t)).join(', ')}
             </button>
             <div
               class="time-options"
-              style={showTimes ? "display:flex" : "display:none"}
+              style={showTimes ? 'display:flex' : 'display:none'}
             >
               <ul class="times-menu">
                 <li>
@@ -224,7 +269,7 @@
                     <input
                       type="checkbox"
                       value="morning"
-                      on:change={(e) => addTime(e, "morning")}
+                      on:change={(e) => addTime(e, 'morning')}
                     />
                     Morning
                   </label>
@@ -234,7 +279,7 @@
                     <input
                       type="checkbox"
                       value="afternoon"
-                      on:change={(e) => addTime(e, "afternoon")}
+                      on:change={(e) => addTime(e, 'afternoon')}
                     />
                     Afternoon
                   </label>
@@ -246,7 +291,7 @@
                     <input
                       type="checkbox"
                       value="evening"
-                      on:change={(e) => addTime(e, "evening")}
+                      on:change={(e) => addTime(e, 'evening')}
                     />
                     Evening
                   </label>
@@ -256,7 +301,7 @@
                     <input
                       type="checkbox"
                       value="night"
-                      on:change={(e) => addTime(e, "night")}
+                      on:change={(e) => addTime(e, 'night')}
                     />
                     Night
                   </label>
@@ -265,7 +310,10 @@
             </div>
           </div>
 
-          <label for="prescriber" class="form-label">Prescriber</label>
+          <label
+            for="prescriber"
+            class="form-label">Prescriber</label
+          >
           <input
             type="text"
             id="prescriber"
@@ -273,10 +321,21 @@
             class="form-input"
           />
 
-          <label for="takenFor" class="form-label">Taken For</label>
-          <input type="text" id="takenFor" name="takenFor" class="form-input" />
+          <label
+            for="takenFor"
+            class="form-label">Taken For</label
+          >
+          <input
+            type="text"
+            id="takenFor"
+            name="takenFor"
+            class="form-input"
+          />
 
-          <label for="lastFilled" class="form-label">Last Filled</label>
+          <label
+            for="lastFilled"
+            class="form-label">Last Filled</label
+          >
           <input
             type="date"
             id="lastFilled"

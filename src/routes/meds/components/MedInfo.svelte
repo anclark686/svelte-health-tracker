@@ -1,5 +1,5 @@
 <script>
-  import { capitalize } from "$lib/helper_functions";
+  import { capitalize } from '$lib/helper_functions';
 
   export let selectedMed;
   export let moreInfoClicked;
@@ -41,7 +41,7 @@
           </thead>
           <tbody>
             {#each Object.values(morning) as med, i}
-              <tr class={i % 2 === 0 ? "even-row" : "odd-row"}>
+              <tr class={i % 2 === 0 ? 'even-row' : 'odd-row'}>
                 <td>{capitalize(med.name)}</td>
                 <td>{med.dose}</td>
                 <td>
@@ -50,11 +50,14 @@
                     name={`${med.name}-morning-check`}
                     id={`${med.name}-morning-check`}
                     bind:checked={med.taken}
-                    on:change={() => toggleMed(med, "morning")}
+                    on:change={() => toggleMed(med, 'morning')}
                   />
                 </td>
                 <td>
-                  <button class="emoji-btn" on:click={() => moreInfo(med)}>
+                  <button
+                    class="emoji-btn"
+                    on:click={() => moreInfo(med)}
+                  >
                     ➕
                   </button>
                 </td>
@@ -81,7 +84,7 @@
           </thead>
           <tbody>
             {#each Object.values(afternoon) as med, i}
-              <tr class={i % 2 === 0 ? "even-row" : "odd-row"}>
+              <tr class={i % 2 === 0 ? 'even-row' : 'odd-row'}>
                 <td>{capitalize(med.name)}</td>
                 <td>{med.dose}</td>
                 <td>
@@ -90,11 +93,14 @@
                     name={`${med.name}-afternoon-check`}
                     id={`${med.name}-afternoon-check`}
                     bind:checked={med.taken}
-                    on:change={() => toggleMed(med, "afternoon")}
+                    on:change={() => toggleMed(med, 'afternoon')}
                   />
                 </td>
                 <td>
-                  <button class="emoji-btn" on:click={() => moreInfo(med)}>
+                  <button
+                    class="emoji-btn"
+                    on:click={() => moreInfo(med)}
+                  >
                     ➕
                   </button>
                 </td>
@@ -121,7 +127,7 @@
           </thead>
           <tbody>
             {#each Object.values(evening) as med, i}
-              <tr class={i % 2 === 0 ? "even-row" : "odd-row"}>
+              <tr class={i % 2 === 0 ? 'even-row' : 'odd-row'}>
                 <td>{capitalize(med.name)}</td>
                 <td>{med.dose}</td>
                 <td>
@@ -130,11 +136,14 @@
                     name={`${med.name}-evening-check`}
                     id={`${med.name}-evening-check`}
                     bind:checked={med.taken}
-                    on:change={() => toggleMed(med, "evening")}
+                    on:change={() => toggleMed(med, 'evening')}
                   />
                 </td>
                 <td>
-                  <button class="emoji-btn" on:click={() => moreInfo(med)}>
+                  <button
+                    class="emoji-btn"
+                    on:click={() => moreInfo(med)}
+                  >
                     ➕
                   </button>
                 </td>
@@ -161,7 +170,7 @@
           </thead>
           <tbody>
             {#each Object.values(night) as med, i}
-              <tr class={i % 2 === 0 ? "even-row" : "odd-row"}>
+              <tr class={i % 2 === 0 ? 'even-row' : 'odd-row'}>
                 <td>{capitalize(med.name)}</td>
                 <td>{med.dose}</td>
                 <td>
@@ -170,11 +179,14 @@
                     name={`${med.name}-night-check`}
                     id={`${med.name}-night-check`}
                     bind:checked={med.taken}
-                    on:change={() => toggleMed(med, "night")}
+                    on:change={() => toggleMed(med, 'night')}
                   />
                 </td>
                 <td>
-                  <button class="emoji-btn" on:click={() => moreInfo(med)}>
+                  <button
+                    class="emoji-btn"
+                    on:click={() => moreInfo(med)}
+                  >
                     ➕
                   </button>
                 </td>
@@ -184,9 +196,7 @@
         </table>
       {/if}
     {:else}
-      <p class="no-meds">
-        No medications found. Click 'Add New' to add a new medication.
-      </p>
+      <p class="no-meds">No medications found. Click 'Add New' to add a new medication.</p>
     {/if}
   </div>
 </div>

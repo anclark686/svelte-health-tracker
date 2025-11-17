@@ -1,13 +1,10 @@
 <script>
-  import moment from "moment-timezone";
+  import moment from 'moment-timezone';
 
-  import { getBasicData } from "$lib/helper_functions";
-  import {
-    addWeightToDates,
-    addWeightToMainDetails,
-  } from "$lib/firebase_functions";
-  import Modal from "../../../components/Modal.svelte";
-  import { auth } from "../../../firebase";
+  import { getBasicData } from '$lib/helper_functions';
+  import { addWeightToDates, addWeightToMainDetails } from '$lib/firebase_functions';
+  import Modal from '../../../components/Modal.svelte';
+  import { auth } from '../../../firebase';
 
   export let showModal;
   export let weightAdded;
@@ -17,28 +14,25 @@
   let date = moment().tz(moment.tz.guess());
 
   const buttonConfig = {
-    primaryText: "Submit",
-    secondaryText: "Cancel",
-    onPrimaryClick: "submit",
-    onSecondaryClick: "close",
+    primaryText: 'Submit',
+    secondaryText: 'Cancel',
+    onPrimaryClick: 'submit',
+    onSecondaryClick: 'close',
   };
 
   const addNewWeight = async (e) => {
     const data = getBasicData(e);
     const uid = auth.currentUser.uid;
 
-    const formattedDate =
-      selectedDate && edit ? selectedDate : date.format("MM-DD-YYYY");
+    const formattedDate = selectedDate && edit ? selectedDate : date.format('MM-DD-YYYY');
 
-    const response = addWeightToDates(uid, data.weight, formattedDate).then(
-      async () => {
-        const response2 = addWeightToMainDetails(uid, data.weight).then(() => {
-          showModal = false;
-          weightAdded = true;
-          edit = false;
-        });
-      }
-    );
+    const response = addWeightToDates(uid, data.weight, formattedDate).then(async () => {
+      const response2 = addWeightToMainDetails(uid, data.weight).then(() => {
+        showModal = false;
+        weightAdded = true;
+        edit = false;
+      });
+    });
   };
 
   $: if (!showModal) {
@@ -52,8 +46,14 @@
     class="add-weight-form"
     on:submit|preventDefault={addNewWeight}
   >
-    <Modal bind:showModal {buttonConfig}>
-      <div class="header" slot="header">
+    <Modal
+      bind:showModal
+      {buttonConfig}
+    >
+      <div
+        class="header"
+        slot="header"
+      >
         {#if edit && selectedDate}
           <h2>
             Enter new weight for {selectedDate}
@@ -63,8 +63,16 @@
         {/if}
       </div>
       <div class="form-content">
-        <label for="weight" class="form-label">New Weight</label>
-        <input type="number" id="weight" name="weight" class="form-input" />
+        <label
+          for="weight"
+          class="form-label">New Weight</label
+        >
+        <input
+          type="number"
+          id="weight"
+          name="weight"
+          class="form-input"
+        />
       </div>
     </Modal>
   </form>

@@ -1,5 +1,5 @@
 <script>
-  import DashboardButton from "./DashboardButton.svelte";
+  import DashboardButton from './DashboardButton.svelte';
   export let title;
   export let dashboard;
   export let other;

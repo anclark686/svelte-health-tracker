@@ -1,21 +1,18 @@
 <script>
-  import { onAuthStateChanged } from "firebase/auth";
+  import { onAuthStateChanged } from 'firebase/auth';
 
-  import { auth } from "../../firebase";
-  import {
-    getHistoricalWeightData,
-    getPreviousWeightData,
-  } from "$lib/firebase_functions";
-  import { getScoreDifferenceAndLeft } from "$lib/helper_functions";
-  import PageHeader from "../../components/PageHeader.svelte";
-  import LoadingSpinner from "../../components/LoadingSpinner.svelte";
-  import ProgressChart from "./components/ProgressChart.svelte";
-  import GoalTracker from "./components/GoalTracker.svelte";
-  import WeightStatistics from "./components/WeightStatistics.svelte";
-  import AddWeightModal from "./components/AddWeightModal.svelte";
-  import HistoricalWeights from "./components/HistoricalWeights.svelte";
+  import { auth } from '../../firebase';
+  import { getHistoricalWeightData, getPreviousWeightData } from '$lib/firebase_functions';
+  import { getScoreDifferenceAndLeft } from '$lib/helper_functions';
+  import PageHeader from '../../components/PageHeader.svelte';
+  import LoadingSpinner from '../../components/LoadingSpinner.svelte';
+  import ProgressChart from './components/ProgressChart.svelte';
+  import GoalTracker from './components/GoalTracker.svelte';
+  import WeightStatistics from './components/WeightStatistics.svelte';
+  import AddWeightModal from './components/AddWeightModal.svelte';
+  import HistoricalWeights from './components/HistoricalWeights.svelte';
 
-  const mainImage = "../src/assets/scale.svg";
+  const mainImage = '../src/assets/scale.svg';
 
   let loading = true;
   let goalsLoading = true;
@@ -115,27 +112,42 @@
 </script>
 
 <main>
-  <PageHeader title="Weight Tracker" dashboard={true} other={{}} />
+  <PageHeader
+    title="Weight Tracker"
+    dashboard={true}
+    other={{}}
+  />
 
   {#if loading}
     <LoadingSpinner pageOrSection="page" />
   {:else}
     <div class="weight-content">
-      <img src={mainImage} alt="exercise" class="page-image" />
+      <img
+        src={mainImage}
+        alt="exercise"
+        class="page-image"
+      />
       <div class="btn-container">
-        <button class="btn" on:click={() => (showModal = true)}
-          >Weigh In!</button
+        <button
+          class="btn"
+          on:click={() => (showModal = true)}>Weigh In!</button
         >
       </div>
       <ProgressChart />
-      <GoalTracker {goalData} {goalsLoading} />
+      <GoalTracker
+        {goalData}
+        {goalsLoading}
+      />
       <HistoricalWeights
         bind:selectedDate
         bind:showModalWithEdit
         {historicalWeightData}
         {historicalLoading}
       />
-      <WeightStatistics {statData} {statsLoading} />
+      <WeightStatistics
+        {statData}
+        {statsLoading}
+      />
       <AddWeightModal
         bind:showModal
         bind:weightAdded
